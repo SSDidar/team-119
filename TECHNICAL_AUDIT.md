@@ -25,9 +25,11 @@ Reviewed the root `index.html`, repository instructions, submission description,
 - [x] Inspected the root walkthrough and confirmed nine chapter labels in source.
 - [x] Updated README and SUBMISSION to explain controls, scope and limitations.
 - [x] Added a concise presentation PDF.
-- [ ] Run browser automation against this exact repository revision.
-- [ ] Inspect browser console and exercise all nine chapters in Chrome/Edge.
-- [ ] Verify layout at target desktop and mobile viewports.
+- [x] Added a Playwright regression suite at `tests/smarthaul.test.mjs` and a GitHub Actions workflow.
+- [x] Corrected the disconnected demo's mode label from `LIVE` to `DEMO`.
+- [ ] Confirm a successful GitHub Actions run against this exact repository revision.
+- [ ] Verify layout and interactions on the actual presentation computer.
+- [x] Parsed the supplied OpenEgiz Compose YAML files successfully with a YAML parser.
 - [ ] Start the OpenEgiz stack in a clean Docker environment.
 - [ ] Verify MQTT-to-Ditto-to-dashboard data flow and document evidence.
 - [ ] Validate any live what-if scenario against platform objects.
