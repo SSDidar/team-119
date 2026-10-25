@@ -9,8 +9,8 @@
 Нужны Linux или macOS, Git, Make, Docker с Compose v2.20+ и не менее 6 ГБ памяти для Docker. На Windows используйте Ubuntu 24.04 в WSL2 — команды выполняются в терминале Ubuntu, не в PowerShell.
 
 ```bash
-git clone <URL_ВАШЕГО_РЕПОЗИТОРИЯ>
-cd <КАТАЛОГ_РЕПОЗИТОРИЯ>
+git clone https://github.com/SSDidar/team-119.git
+cd team-119/Samson_OpenEgiz
 make samson
 ```
 
