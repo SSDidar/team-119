@@ -36,6 +36,19 @@ make example-mine
 
 Они поднимают платформу и примерную шахту, но сами по себе не означают, что walkthrough подключён к live-телеметрии.
 
+## Browser regression tests
+
+В репозитории есть Playwright-проверки, которые запускаются через GitHub Actions при push/PR в `main`. Для локального запуска в Node.js 22:
+
+```bash
+npm init -y
+npm install --no-save playwright
+npx playwright install chromium
+node tests/smarthaul.test.mjs
+```
+
+Проверяются девять глав, ручная навигация, пауза, клавиатура, рендеринг Canvas на пяти размерах экрана и ошибки браузера. Успешный статус CI нужно проверять во вкладке Actions репозитория.
+
 ## Статус и ограничения
 
 - `index.html` — автономная интерактивная презентация.
