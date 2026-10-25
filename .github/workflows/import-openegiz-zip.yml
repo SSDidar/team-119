@@ -21,9 +21,10 @@ jobs:
           from pathlib import Path, PurePosixPath
           import zipfile
 
-          archive = Path("Samson_OpenEgiz_Sanitized_Import.zip")
-          if not archive.is_file():
-              raise SystemExit("Upload Samson_OpenEgiz_Sanitized_Import.zip to the repository root first.")
+          candidates = [Path("Samson_OpenEgiz_Sanitized_Import.zip"), Path("OpenEgiz.zip")]
+          archive = next((p for p in candidates if p.is_file()), None)
+          if archive is None:
+              raise SystemExit("Upload OpenEgiz.zip or Samson_OpenEgiz_Sanitized_Import.zip to the repository root first.")
 
           target = Path("Samson_OpenEgiz")
           skip_dirs = {".git", "node_modules", "dist", "__pycache__", ".venv", "venv"}
