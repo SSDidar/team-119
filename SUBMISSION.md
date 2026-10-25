@@ -1,64 +1,58 @@
-# SUBMISSION
-
-<!-- Fill in every section. The AI Jury studies this file together with the code, the Build Report, the presentation and the Stand's interface. Accepted languages: English, Kazakh, Russian. These hint comments may be deleted. -->
+# SUBMISSION — SmartHaul: диспетчерские сценарии цифрового карьера
 
 ## Concept
 
-<!-- Written by the Team before the code: your own choice, a few sentences per answer. Everything else in the Submission follows from it. -->
+**Enterprise:** Демонстрационная открытая горнодобывающая площадка с карьерными уступами, дорожной сетью, погрузочными и разгрузочными узлами.
 
-**Enterprise:** <!-- Which mining enterprise, or which part of it, the twin represents. -->
+**Users:** Диспетчер смены, руководитель транспортного участка и инженер, оценивающий работу технологической сети.
 
-**Users:** <!-- Who uses the twin. -->
+**Decision:** Как безопасно и последовательно реагировать на очередь, перекрытие дорожного сегмента или отказ самосвала; какие параметры необходимо отслеживать перед переназначением маршрута.
 
-**Decision:** <!-- Which decision the twin helps them make. -->
+**Why this choice:** Движение техники и доступность дорог наглядно показывают, как локальное событие влияет на поток перевозок. Сценарии можно объяснить во время демонстрации и расширить измерениями, если появится источник достоверных данных.
 
-**Why this choice:** <!-- Why this enterprise, these users and this decision. -->
-
-**Real or fictional:** <!-- A real object: name it and give the sources of its numbers. A fictional one: which real objects it resembles and where its numbers come from. A real object with sourced numbers scores higher. -->
+**Real or fictional:** Концептуальная модель, не цифровой двойник конкретного действующего предприятия. Параметры интерфейса и показатели синтетические; реальные производственные данные не заявляются.
 
 ## Team
 
-<!-- GitHub usernames of the Participants. Other personal data are not required: the repository becomes public after the Freeze (Rules, section 15). -->
-
 | GitHub |
 |---|
-|  |
+| SSDidar |
 
 ## Mine
 
-<!-- Which part of a mining enterprise the Submission represents (open pit, underground mine, processing plant…), which objects are twins in OpenEgiz, how they are related, and where they are defined in the code. -->
+В `index.html` реализована автономная Canvas-визуализация условного карьера: концентрические уступы, спиральные дороги, восемь условных машин и пять операционных узлов. Геометрия и движение генерируются на стороне браузера. Исходный пример OpenEgiz находится в `examples/mine/`.
 
 ## Modules and What-if Scenarios
 
-<!-- Modules: functions on top of the twin, from the Mine Map or your own. What-if Scenarios: changes of an operating condition that can be run on the Stand without changing the code (close a road, stop equipment…). Only what works on the Stand is taken into account. -->
-
-| Module or What-if Scenario | What it does | How to see it on the Stand | How to undo it (scenarios) |
+| Module or What-if Scenario | What it does | How to see it on the Stand | How to undo it |
 |---|---|---|---|
-|  |  |  |  |
+| Карьер целиком | Показывает уступы, дороги и парк техники | Откройте `index.html`, выберите «Карьер целиком» | Выбрать другой сценарий |
+| Цикл самосвала | Иллюстрирует движение машин по маршруту | Выберите «Цикл самосвала» | Выбрать другой сценарий |
+| Очередь | Подсвечивает условную перегрузку узла | Выберите «Очередь на погрузке» | Выбрать другой сценарий |
+| Перекрытие C-3 | Показывает закрытый сегмент и условный объезд | Выберите «Перекрытие дороги C-3» | Выбрать другой сценарий или сбросить |
+| Отказ HT-04 | Останавливает визуальный маркер одной машины | Выберите «Поломка HT-04» | Выбрать другой сценарий |
+| Сравнение решений | Показывает условный индекс состояния сети | Выберите «Сравнение решений» | Выбрать другой сценарий |
+
+Эти сценарии — презентационная анимация, а не подключённые к платформе исполняемые what-if команды.
 
 ## What works and what does not
 
-<!-- What has been verified, what is unfinished, which bugs are known. -->
+**Работает в автономном HTML-прототипе:** навигация между шестью сценариями, анимация, пауза/продолжение, сброс, управление видом мышью и масштабом колесом.
+
+**Не подтверждено:** сквозной обмен телеметрией через MQTT/Eclipse Ditto, синхронизация twin-объектов, реальная оптимизация диспетчеризации, интеграционные испытания в среде жюри и измеренный производственный эффект.
 
 ## Data and Assumptions
 
-<!--
-- Synthetic and real data.
-- Sources of parameters: equipment data sheets, reference literature, industrial safety regulations, datasets.
-- Datasets: source, license, how they are provided (in the repository or downloaded per the README).
-Confidential data of organizations and personal data are prohibited.
--->
+Данные синтетические. Восемь машин и операционные узлы являются визуальными представителями, а не фактическим размером парка. Проценты и счётчики интерфейса — иллюстративные показатели для показа состояний. Источники реальных параметров не заявляются.
 
 ## Mine visualization
 
-<!-- Address on the Stand, dashboard or scene; what it shows. -->
+Основная демонстрация: `index.html` в корне репозитория. Открыть в актуальном Chrome или Edge; внешние библиотеки не требуются.
 
 ## Limitations
 
+Визуализация использует Canvas и упрощённую перспективную проекцию. Это не инженерная модель рельефа, не фотореалистичная 3D-сцена и не система управления оборудованием. Нельзя использовать демонстрационные значения для промышленной безопасности или планирования реальных смен. Интеграцию с OpenEgiz необходимо реализовать и проверить отдельно.
+
 ## Presentation
 
-`presentation.pdf` in the repository root. Video (optional): <link>
-
----
-
-Platform: OpenEgiz v1.0.4.
+План демонстрации: обзор → цикл рейса → очередь → перекрытие дороги → отказ техники → сравнение решений. Для подачи требуется приложить отдельный `presentation.pdf` в корень репозитория.
