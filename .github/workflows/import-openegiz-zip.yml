@@ -1,0 +1,75 @@
+name: Import OpenEgiz ZIP
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  import:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          ref: main
+
+      - name: Extract sanitized project
+        run: |
+          python - <<'PY'
+          from pathlib import Path, PurePosixPath
+          import zipfile
+
+          archive = Path("Samson_OpenEgiz_Sanitized_Import.zip")
+          if not archive.is_file():
+              raise SystemExit("Upload Samson_OpenEgiz_Sanitized_Import.zip to the repository root first.")
+
+          target = Path("Samson_OpenEgiz")
+          skip_dirs = {".git", "node_modules", "dist", "__pycache__", ".venv", "venv"}
+          skip_names = {".env", "secrets.values.yaml", "credentials.md"}
+          skip_suffixes = {".p12", ".pfx", ".credentials"}
+          written = skipped = 0
+
+          with zipfile.ZipFile(archive) as zf:
+              bad = zf.testzip()
+              if bad:
+                  raise SystemExit(f"ZIP integrity check failed: {bad}")
+              for item in zf.infolist():
+                  if item.is_dir():
+                      continue
+                  path = PurePosixPath(item.filename)
+                  if not path.parts or path.parts[0] != "Samson_OpenEgiz":
+                      continue
+                  rel = PurePosixPath(*path.parts[1:])
+                  if not rel.parts:
+                      continue
+                  name = rel.name.lower()
+                  if (set(rel.parts) & skip_dirs or name in skip_names
+                      or rel.suffix.lower() in skip_suffixes
+                      or any(x in name for x in ("-key.pem", "private-key", "id_rsa", "id_ed25519"))
+                      or (name.endswith(".pem") and ("key" in name or "private" in name))):
+                      skipped += 1
+                      continue
+                  dest = target.joinpath(*rel.parts)
+                  dest.parent.mkdir(parents=True, exist_ok=True)
+                  dest.write_bytes(zf.read(item))
+                  written += 1
+
+          archive.unlink()
+          print(f"Imported files: {written}")
+          print(f"Skipped sensitive/generated files: {skipped}")
+          PY
+
+      - name: Commit imported project
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add Samson_OpenEgiz
+          git add -u
+          if git diff --cached --quiet; then
+            echo "No changes to import."
+          else
+            git commit -m "Import sanitized OpenEgiz project"
+            git push origin main
+          fi
