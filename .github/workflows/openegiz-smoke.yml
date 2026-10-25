@@ -1,0 +1,50 @@
+name: OpenEgiz integration smoke test
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "deploy/compose/**"
+      - "examples/mine/**"
+      - "scripts/compose-*.sh"
+      - "Makefile"
+      - ".github/workflows/openegiz-smoke.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openegiz-smoke-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compose-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Show Docker versions and available resources
+        run: |
+          docker version
+          docker compose version
+          free -h
+          df -h .
+
+      - name: Start OpenEgiz and Example Mine
+        run: make example-mine
+
+      - name: Verify end-to-end telemetry pipeline
+        run: make smoke
+
+      - name: Show service status on failure
+        if: failure()
+        run: |
+          docker compose -f deploy/compose/docker-compose.yml -f examples/mine/compose.yml ps -a || true
+          docker compose -f deploy/compose/docker-compose.yml -f examples/mine/compose.yml logs --no-color --tail=150 || true
+
+      - name: Stop services and remove test data
+        if: always()
+        run: make clean || true
