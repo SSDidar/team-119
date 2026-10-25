@@ -1,34 +1,35 @@
-# Technical audit — SmartHaul prototype
+# Technical audit — SmartHaul walkthrough
 
-## Scope reviewed
+## Scope
 
-The supplied archive contains a self-contained HTML walkthrough and a separate OpenEgiz platform snapshot. The repository's root demo is intentionally a lightweight, dependency-free Canvas prototype. It must not be confused with the platform example or a live digital twin.
+Reviewed the root `index.html`, repository instructions, submission description, and the supplied ZIP's README/QA notes. The root walkthrough contains nine chapters and is a standalone browser presentation. It must not be confused with a live digital twin or with the OpenEgiz example deployment.
 
-## Root visualization
+## Main components
 
-- Canvas drawing: layered circular benches, road loops, scenario overlays and stylized truck markers.
-- Projection: simple perspective-like 2D projection from model coordinates; this is not WebGL or an engineering terrain renderer.
-- Animation: `requestAnimationFrame` advances the demo clock while running.
-- Controls: scenario buttons, previous/next, pause/resume, reset, keyboard navigation, pointer drag and wheel zoom.
-- Scenario states: overview, truck cycle, queue, C-3 road closure, HT-04 failure and comparison view.
-- Data: hard-coded illustrative values. No telemetry source is connected.
+- Canvas-based stylized mine and haul-road visualization.
+- Nine-chapter walkthrough: overview, haul cycle, queues, assignment concept, C-3 closure, truck failure, impact, architecture, finale.
+- Browser controls for chapter navigation, pause/resume, camera movement, zoom and optional speech.
+- Scenario-specific visual changes and illustrative metrics.
 
-## Safety and correctness notes
+## Important boundaries
 
-1. All visible counters and percentages must be labelled as synthetic; they are not operational measurements.
-2. Road closure and breakdown are visual scenarios only. They do not issue commands to equipment.
-3. OpenEgiz/MQTT/Ditto integration is not implemented by this standalone page.
-4. The model does not establish actual road grades, geotechnical correctness, dispatch optimality or financial savings.
-5. Use a current Chrome/Edge browser. The page uses Canvas, ResizeObserver and requestAnimationFrame.
+1. Displayed figures and equipment counts are illustrative, not sourced live production data.
+2. Road closure, breakdown and assignment chapters are visual explanations, not operational commands.
+3. The standalone page does not itself publish MQTT messages or read Eclipse Ditto twins.
+4. The presentation does not prove dispatch optimization, engineering terrain accuracy, safety compliance or real financial savings.
+5. The platform example and Docker deployment require separate environment validation.
 
 ## Validation status
 
-- [x] Reviewed supplied HTML and accompanying QA notes in the ZIP.
-- [x] Added a standalone root `index.html` with no external script/style dependencies.
-- [x] Documented controls and limitations.
-- [ ] Re-run browser automation against this exact repository revision.
-- [ ] Validate the complete OpenEgiz stack in a clean Docker environment.
-- [ ] Verify platform object model, MQTT flow and live dashboard integration.
-- [ ] Add a reproducible automated test harness and measured scenario outputs.
+- [x] Reviewed supplied archive documentation and QA report.
+- [x] Inspected the root walkthrough and confirmed nine chapter labels in source.
+- [x] Updated README and SUBMISSION to explain controls, scope and limitations.
+- [x] Added a concise presentation PDF.
+- [ ] Run browser automation against this exact repository revision.
+- [ ] Inspect browser console and exercise all nine chapters in Chrome/Edge.
+- [ ] Verify layout at target desktop and mobile viewports.
+- [ ] Start the OpenEgiz stack in a clean Docker environment.
+- [ ] Verify MQTT-to-Ditto-to-dashboard data flow and document evidence.
+- [ ] Validate any live what-if scenario against platform objects.
 
-Do not interpret the unchecked items as passed. The original archive's QA report describes tests on its supplied walkthrough; it does not automatically certify this repository revision or the OpenEgiz stack.
+The original ZIP's QA report applies to the walkthrough version tested by its author. It does not automatically certify this repository revision or the OpenEgiz stack. Unchecked items above have not been claimed as passed.
