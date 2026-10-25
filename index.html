@@ -1,46 +1,721 @@
-<!doctype html>
-<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#080d0e"><title>SmartHaul — цифровой карьер</title>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<meta name="theme-color" content="#080d0e" />
+<title>SmartHaul — 3D тур по цифровому карьеру</title>
 <style>
-:root{color-scheme:dark;--bg:#080d0e;--panel:rgba(10,18,20,.88);--line:#304447;--text:#eff7f3;--muted:#a1b7b3;--lime:#c8ff79;--cyan:#78e7ed;--orange:#ffbd73;--red:#ff777e}*{box-sizing:border-box}html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font:14px/1.45 Inter,Segoe UI,Arial,sans-serif}canvas{position:fixed;inset:0;width:100%;height:100%;touch-action:none}.shade{position:fixed;inset:0;pointer-events:none;background:radial-gradient(ellipse at 50% 44%,transparent 25%,#03070844 75%,#030708bb 120%)}.hud{position:fixed;inset:0;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(12px,2.4vw,30px);pointer-events:none}.top,.bottom{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}.brand,.metric,.story,.controls,.chapters{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(12px);border-radius:16px}.brand{padding:12px 15px;display:flex;gap:12px;align-items:center}.logo{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;background:linear-gradient(145deg,#e3ff9e,#84c43d);color:#11200b;font-weight:900;font-size:20px}.eyebrow{font-size:10px;letter-spacing:.17em;color:var(--lime);font-weight:800}.brand strong{display:block;font-size:15px;letter-spacing:.04em}.muted{color:var(--muted)}.metrics{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}.metric{padding:10px 13px;min-width:92px}.metric small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em}.metric b{font-size:18px}.metric em{font-size:10px;font-style:normal;color:var(--lime);margin-left:4px}.story{width:min(410px,100%);padding:clamp(16px,2vw,25px);pointer-events:auto}.story .chapter{font-size:10px;letter-spacing:.15em;color:var(--lime);font-weight:800}.story h1{font-size:clamp(24px,3vw,39px);line-height:1.05;letter-spacing:-.04em;margin:10px 0 12px}.story p{margin:0;color:#c0cfcb;max-width:52ch}.pill{display:inline-flex;align-items:center;gap:7px;border:1px solid #405a49;border-radius:99px;padding:5px 9px;margin-top:15px;font-size:11px;color:var(--lime)}.dot{width:6px;height:6px;border-radius:50%;background:var(--lime);box-shadow:0 0 12px var(--lime)}.bottom{align-items:flex-end}.controls{display:flex;gap:6px;padding:7px;pointer-events:auto}.btn{border:1px solid #35494b;background:#172426;color:var(--text);padding:10px 12px;border-radius:10px;cursor:pointer;font:inherit;transition:.18s}.btn:hover{border-color:var(--lime);transform:translateY(-1px)}.btn.primary{background:var(--lime);color:#11190c;border-color:var(--lime);font-weight:800}.chapters{display:flex;gap:6px;padding:9px;pointer-events:auto;max-width:min(570px,100%);overflow:auto}.chapter-btn{flex:0 0 28px;width:28px;height:28px;border-radius:8px;border:1px solid #35494b;background:#172426;color:#a9bcb7;cursor:pointer}.chapter-btn.active{background:var(--lime);color:#11190c;border-color:var(--lime);font-weight:900}.hint{font-size:10px;color:#a1b7b3;margin-top:9px}.bottom-left{display:flex;flex-direction:column;gap:8px}.status{display:flex;align-items:center;gap:7px;color:#a8bbb5;font-size:11px;padding-left:5px}.status .dot{background:var(--cyan);box-shadow:0 0 10px var(--cyan)}@media(max-width:760px){.top{align-items:flex-start}.metrics{max-width:145px}.metric{min-width:62px;padding:8px}.metric b{font-size:14px}.metric:nth-child(3){display:none}.story{width:min(340px,100%)}.bottom{flex-direction:column-reverse;align-items:stretch}.bottom-left{align-items:flex-start}.chapters{max-width:100%;justify-content:flex-start}.controls{justify-content:space-between}.btn{padding:9px 10px}.brand{padding:9px}.brand .muted{display:none}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
-</style></head><body><canvas id="scene" aria-label="Анимированная модель цифрового карьера"></canvas><div class="shade"></div>
-<div class="hud"><div class="top"><div class="brand"><div class="logo">S</div><div><div class="eyebrow">SMART HAUL / DIGITAL MINE</div><strong>ОПЕРАЦИОННЫЙ ДВОЙНИК</strong><div class="muted" style="font-size:11px">Интерактивный демонстрационный тур</div></div></div><div class="metrics"><div class="metric"><small>Парк в сцене</small><b id="truckMetric">08</b><em>ед.</em></div><div class="metric"><small>Маршрут</small><b id="routeMetric">C-1</b></div><div class="metric"><small>Режим</small><b id="modeMetric">LIVE</b></div></div></div>
-<div class="bottom"><div class="bottom-left"><section class="story"><div class="chapter" id="chapterLabel">ГЛАВА 01 / 09 · ОБЗОР</div><h1 id="headline">Карьер — единая система</h1><p id="caption">Техника, дороги и точки погрузки работают как одна транспортная система. Перемещайте камеру и исследуйте сцену.</p><div class="pill"><span class="dot"></span><span id="pillText">СИМУЛЯЦИЯ АКТИВНА</span></div><div class="hint">← → сцены · пробел пауза · перетаскивание обзор · колесо масштаб</div></section><div class="status"><span class="dot"></span><span id="statusText">Демонстрационные данные · не телеметрия реального предприятия</span></div></div>
-<div><nav class="chapters" id="chapters" aria-label="Главы тура"></nav><div class="controls"><button class="btn" id="prev" aria-label="Предыдущая сцена">← Назад</button><button class="btn primary" id="pause">Ⅱ Пауза тура</button><button class="btn" id="next" aria-label="Следующая сцена">Далее →</button><button class="btn" id="reset" title="Сбросить камеру">⟳</button><button class="btn" id="full" title="Полный экран">⛶</button></div></div></div></div>
+  :root{--bg:#080d0e;--panel:rgba(10,17,19,.82);--panel2:rgba(15,24,26,.76);--stroke:rgba(190,222,220,.18);--text:#edf5f1;--muted:#9fb3af;--lime:#b7f36a;--cyan:#73dff0;--orange:#ffbf69;--red:#ff6f75;--blue:#8d9bff}
+  *{box-sizing:border-box}
+  html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}
+  #scene{position:fixed;inset:0;width:100%;height:100%;display:block;background:#111b20;cursor:grab;touch-action:none}
+  #scene:active{cursor:grabbing}
+  .vignette{pointer-events:none;position:fixed;inset:0;background:radial-gradient(ellipse at 50% 44%,transparent 25%,rgba(3,7,8,.25) 75%,rgba(3,6,7,.75) 120%);z-index:1}
+  .grain{pointer-events:none;position:fixed;inset:0;z-index:2;opacity:.08;background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 180 180' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.35'/%3E%3C/svg%3E")}
+  .hud{position:fixed;z-index:5;inset:0;pointer-events:none}
+  .topbar{position:absolute;left:clamp(16px,3vw,44px);right:clamp(16px,3vw,44px);top:clamp(14px,2.2vh,26px);display:flex;justify-content:space-between;align-items:flex-start;gap:14px}
+  .brand{display:flex;align-items:center;gap:12px}
+  .brand-icon{width:42px;height:42px;border-radius:13px;background:linear-gradient(145deg,#d5ff8c,#8cc841);color:#0b1510;display:grid;place-items:center;box-shadow:0 0 26px rgba(183,243,106,.14)}
+  .brand-icon svg{width:25px;height:25px}
+  .brand-name{font-size:15px;letter-spacing:.15em;font-weight:900;line-height:1.05}
+  .brand-sub{font-size:9px;letter-spacing:.22em;text-transform:uppercase;color:#b6c6c2;margin-top:5px}
+  .top-meta{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
+  .pill{border:1px solid var(--stroke);background:rgba(9,16,18,.68);backdrop-filter:blur(12px);border-radius:999px;padding:9px 13px;display:flex;align-items:center;gap:8px;color:#c8d7d3;font-size:10px;letter-spacing:.09em;text-transform:uppercase;white-space:nowrap}
+  .pill .dot{width:7px;height:7px;border-radius:50%;background:var(--lime);box-shadow:0 0 11px var(--lime)}
+  .pill.warn .dot{background:var(--orange);box-shadow:0 0 11px var(--orange)}
+  .scene-index{position:absolute;left:clamp(18px,3vw,46px);top:22%;font-size:10px;letter-spacing:.19em;text-transform:uppercase;color:var(--lime);display:flex;align-items:center;gap:10px}
+  .scene-index:before{content:"";width:26px;height:1px;background:var(--lime)}
+  .headline{position:absolute;left:clamp(18px,3vw,46px);top:25%;max-width:min(590px,48vw);text-shadow:0 8px 30px rgba(0,0,0,.45)}
+  .eyebrow{font-size:11px;text-transform:uppercase;letter-spacing:.22em;color:var(--cyan);margin-bottom:12px;font-weight:700}
+  h1{font-size:clamp(29px,4.2vw,62px);letter-spacing:-.045em;line-height:.99;margin:0 0 15px;font-weight:850}
+  .headline p{margin:0;max-width:480px;color:#d0ddda;font-size:clamp(13px,1.15vw,16px);line-height:1.58}
+  .metric-card{position:absolute;right:clamp(18px,3vw,44px);top:24%;width:min(270px,25vw);padding:16px 17px;border:1px solid var(--stroke);background:linear-gradient(140deg,rgba(12,22,24,.88),rgba(10,17,19,.68));border-radius:17px;backdrop-filter:blur(16px);box-shadow:0 18px 70px rgba(0,0,0,.2)}
+  .metric-label{font-size:9px;color:var(--muted);letter-spacing:.16em;text-transform:uppercase;margin-bottom:13px}
+  .metric-main{font-size:23px;font-weight:800;letter-spacing:-.04em}
+  .metric-main small{font-size:11px;font-weight:600;color:#b9cbc6;letter-spacing:0}
+  .metric-foot{color:var(--lime);font-size:10px;line-height:1.45;margin-top:7px}
+  .metric-divider{height:1px;background:var(--stroke);margin:14px 0}
+  .metric-row{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:9px;color:#c6d5d1;font-size:11px}
+  .metric-row strong{color:#f0f6f2;font-weight:700}
+  .object-tag{position:absolute;max-width:210px;padding:8px 10px;border:1px solid rgba(183,243,106,.34);background:rgba(7,15,15,.88);border-radius:9px;box-shadow:0 8px 28px rgba(0,0,0,.3);font-size:10px;font-weight:700;letter-spacing:.04em;display:none;transform:translate(-50%,-110%);white-space:nowrap}
+  .object-tag:after{content:"";position:absolute;width:5px;height:5px;left:calc(50% - 2px);bottom:-3px;background:var(--lime);transform:rotate(45deg)}
+  .object-tag .tag-sub{display:block;margin-top:4px;color:#9fbbb5;font-size:9px;font-weight:500;letter-spacing:0}
+  .callout{position:absolute;right:clamp(18px,3vw,44px);top:45%;width:min(300px,27vw);background:rgba(11,19,21,.9);border:1px solid rgba(115,223,240,.28);border-radius:15px;padding:15px 16px;display:none;box-shadow:0 18px 48px rgba(0,0,0,.26);backdrop-filter:blur(14px)}
+  .callout-head{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:800;letter-spacing:.04em}
+  .callout-icon{width:27px;height:27px;border-radius:8px;display:grid;place-items:center;background:rgba(115,223,240,.1);color:var(--cyan);font-size:14px}
+  .callout p{margin:10px 0 0;font-size:11px;line-height:1.55;color:#b9cbc7}
+  .callout .callout-kpi{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .mini-kpi{border-radius:8px;border:1px solid var(--stroke);padding:7px 9px;font-size:10px;color:#cfe0da;background:rgba(255,255,255,.025)}
+  .mini-kpi b{color:var(--lime);font-size:12px;margin-right:4px}
+  .bottom-area{position:absolute;left:clamp(14px,3vw,44px);right:clamp(14px,3vw,44px);bottom:clamp(12px,2.2vh,24px);display:flex;flex-direction:column;gap:12px}
+  .caption-box{display:flex;align-items:flex-end;gap:14px;padding:14px 17px;border-radius:15px;border:1px solid rgba(227,242,239,.15);background:linear-gradient(100deg,rgba(5,11,13,.9),rgba(8,15,17,.74));backdrop-filter:blur(16px);box-shadow:0 12px 54px rgba(0,0,0,.18)}
+  .speaker-mark{width:34px;height:34px;flex:0 0 34px;display:grid;place-items:center;border-radius:10px;background:rgba(183,243,106,.1);border:1px solid rgba(183,243,106,.2);color:var(--lime);font-size:14px}
+  .caption-content{flex:1;min-width:0}
+  .caption-label{font-size:9px;letter-spacing:.17em;text-transform:uppercase;color:var(--lime);margin-bottom:5px;font-weight:800}
+  .caption-text{font-size:clamp(12px,1.05vw,14px);line-height:1.5;color:#eef5f1;max-width:1020px}
+  .caption-side{font-size:9px;text-transform:uppercase;letter-spacing:.13em;color:#899e99;white-space:nowrap;padding-bottom:2px}
+  .controls{display:grid;grid-template-columns:auto 1fr auto;gap:14px;align-items:center}
+  .control-group{display:flex;align-items:center;gap:7px;pointer-events:auto}
+  button{font:inherit;color:var(--text);cursor:pointer;pointer-events:auto;border:1px solid rgba(210,232,226,.18);background:rgba(10,18,19,.8);border-radius:10px;padding:10px 13px;display:inline-flex;align-items:center;justify-content:center;gap:8px;transition:background .18s,border-color .18s,transform .18s;backdrop-filter:blur(12px);font-size:11px;font-weight:700;white-space:nowrap}
+  button:hover{background:rgba(25,39,39,.95);border-color:rgba(183,243,106,.5);transform:translateY(-1px)}
+  button.primary{background:var(--lime);border-color:var(--lime);color:#10190e;box-shadow:0 0 20px rgba(183,243,106,.12)}
+  button.primary:hover{background:#caff89}
+  button.icon-btn{width:38px;height:38px;padding:0;font-size:14px}
+  .chapter-track{height:38px;display:flex;align-items:center;gap:8px;pointer-events:auto;min-width:0}
+  .track-line{height:3px;flex:1;background:rgba(209,230,223,.17);border-radius:4px;position:relative;overflow:hidden}
+  .track-fill{position:absolute;inset:0 auto 0 0;width:0;background:var(--lime);box-shadow:0 0 12px rgba(183,243,106,.5);transition:width .1s linear}
+  .chapter-dots{display:flex;gap:4px}
+  .chapter-dot{width:8px;height:8px;min-width:8px;border-radius:50%;padding:0;background:rgba(210,230,224,.25);border:0;box-shadow:none;transform:none}
+  .chapter-dot.active{background:var(--lime);box-shadow:0 0 9px rgba(183,243,106,.4)}
+  .chapter-dot.done{background:rgba(183,243,106,.52)}
+  .time-label{color:#93a8a2;font-size:10px;font-variant-numeric:tabular-nums;white-space:nowrap}
+  body.finale .scene-index,body.finale .headline,body.finale .metric-card,body.finale .object-tag,body.finale .callout{opacity:0;transition:opacity .45s}
+  .end-card{position:fixed;z-index:8;inset:0;display:none;align-items:center;justify-content:center;text-align:center;background:linear-gradient(180deg,rgba(3,8,10,.28),rgba(3,8,10,.67));backdrop-filter:blur(2px);pointer-events:none}
+  .end-inner{max-width:780px;padding:40px 24px;animation:rise .8s ease both}
+  .end-mark{font-size:clamp(40px,8vw,104px);font-weight:950;letter-spacing:-.07em;line-height:.95;background:linear-gradient(90deg,#b7f36a,#77dff0);-webkit-background-clip:text;background-clip:text;color:transparent}
+  .end-sub{font-size:clamp(14px,1.5vw,20px);color:#d8e6e0;margin-top:18px;letter-spacing:.02em}
+  .end-caption{font-size:11px;text-transform:uppercase;letter-spacing:.25em;color:#8ca5a0;margin-top:27px}
+  @keyframes rise{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+  .hint{position:absolute;bottom:190px;left:50%;transform:translateX(-50%);color:rgba(221,237,230,.62);font-size:9px;letter-spacing:.12em;text-transform:uppercase;white-space:nowrap;pointer-events:none;opacity:1;transition:opacity 1s}
+  @media(max-width:900px){.metric-card{width:235px;top:auto;bottom:220px}.headline{top:22%;max-width:60vw}.callout{top:43%;width:235px}.caption-side{display:none}.controls{grid-template-columns:auto 1fr}.controls>.control-group:last-child{display:none}.chapter-dots{display:none}}
+  @media(max-width:620px){.topbar{align-items:center}.brand-icon{width:35px;height:35px}.brand-name{font-size:12px}.brand-sub{font-size:7px}.top-meta .pill:first-child{display:none}.pill{font-size:8px;padding:8px 10px}.scene-index{top:16%;font-size:8px}.headline{top:19%;max-width:83vw}.headline p{font-size:12px;max-width:330px}.metric-card{right:14px;top:auto;bottom:224px;width:190px;padding:11px 12px}.metric-main{font-size:18px}.metric-divider{margin:9px 0}.metric-row{font-size:9px}.callout{right:14px;top:42%;width:190px;padding:11px}.callout p{font-size:10px}.bottom-area{gap:8px}.caption-box{padding:10px 11px;gap:9px}.speaker-mark{width:28px;height:28px;flex-basis:28px}.caption-label{font-size:8px}.caption-text{font-size:11px}.controls{gap:7px}.control-group{gap:4px}.controls button{padding:9px 10px;font-size:10px}.controls .icon-btn{width:33px;height:33px}.chapter-track{gap:5px}.time-label{font-size:9px}.hint{display:none}}
+</style>
+</head>
+<body>
+<canvas id="scene" aria-label="Интерактивная 3D-сцена карьера"></canvas>
+<div class="vignette"></div><div class="grain"></div>
+<div class="hud">
+  <div class="topbar">
+    <div class="brand">
+      <div class="brand-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 19h18M5 16l4-8 3 5 3-7 4 10"/><path d="M8 19v-3m8 3v-3"/></svg></div>
+      <div><div class="brand-name">SMART<span style="color:var(--lime)">HAUL</span></div><div class="brand-sub">Mine intelligence · 3D walkthrough</div></div>
+    </div>
+    <div class="top-meta">
+      <div class="pill"><span>СЕВЕРНЫЙ КАРЬЕР</span></div>
+      <div class="pill warn"><span class="dot"></span><span>Демонстрационная модель</span></div>
+    </div>
+  </div>
+  <div class="scene-index" id="sceneIndex">Глава 01 / 09 · Обзор</div>
+  <div class="headline" id="headline">
+    <div class="eyebrow" id="eyebrow">Интеллектуальная диспетчеризация</div>
+    <h1 id="sceneTitle">Карьер —<br>единая система</h1>
+    <p id="sceneDesc">Один цифровой двойник связывает технику, маршруты и точки погрузки. SmartHaul ищет, где теряются время и деньги.</p>
+  </div>
+  <div class="metric-card" id="metricCard">
+    <div class="metric-label" id="metricLabel">Контур цифрового карьера</div>
+    <div class="metric-main" id="metricMain">71 <small>в конфигурации</small></div>
+    <div class="metric-foot" id="metricFoot">Параметры конфигурации OpenMines</div>
+    <div class="metric-divider"></div>
+    <div class="metric-row"><span id="metricALabel">Зоны погрузки</span><strong id="metricA">5</strong></div>
+    <div class="metric-row"><span id="metricBLabel">Пункты разгрузки</span><strong id="metricB">5</strong></div>
+    <div class="metric-row"><span>Машин в сцене</span><strong>8</strong></div>
+  </div>
+  <div class="object-tag" id="objectTag">ЭКСКАВАТОР A<span class="tag-sub">Погрузочный узел</span></div>
+  <div class="callout" id="callout">
+    <div class="callout-head"><span class="callout-icon" id="calloutIcon">↗</span><span id="calloutTitle">Решение диспетчера</span></div>
+    <p id="calloutText">Назначение выбирается с учётом расстояния, ожидаемой очереди и полного цикла рейса.</p>
+    <div class="callout-kpi" id="calloutKpis"><span class="mini-kpi"><b>01</b> Сценарий</span></div>
+  </div>
+  <div class="bottom-area">
+    <div class="caption-box">
+      <div class="speaker-mark">◖</div>
+      <div class="caption-content"><div class="caption-label" id="captionLabel">SmartHaul · Введение</div><div class="caption-text" id="captionText">Мы показываем не просто карту. Это единая модель карьера, в которой решения диспетчера меняют движение техники.</div></div>
+      <div class="caption-side" id="captionSide">СЦЕНАРИЙ · 01</div>
+    </div>
+    <div class="controls">
+      <div class="control-group">
+        <button id="prevBtn" class="icon-btn" title="Предыдущая сцена" aria-label="Предыдущая сцена">‹</button>
+        <button id="playBtn" class="primary"><span id="playIcon">Ⅱ</span><span id="playText">Пауза тура</span></button>
+        <button id="nextBtn" class="icon-btn" title="Следующая сцена" aria-label="Следующая сцена">›</button>
+      </div>
+      <div class="chapter-track">
+        <div class="chapter-dots" id="chapterDots"></div>
+        <div class="track-line"><div class="track-fill" id="trackFill"></div></div>
+        <div class="time-label" id="timeLabel">00:00 / 01:18</div>
+      </div>
+      <div class="control-group"><button id="speechBtn" title="Озвучить текст сцены">◖ <span>Озвучка: выкл.</span></button><button id="replayBtn">↺ <span>С начала</span></button><button id="resetViewBtn" class="icon-btn" title="Вернуть камеру">⌖</button><button id="fullscreenBtn" class="icon-btn" title="Полный экран">⛶</button></div>
+    </div>
+  </div>
+  <div class="hint" id="hint">Перетаскивай для обзора · колесо мыши — масштаб · ← → — сцены · пробел — пауза</div>
+</div>
+<div class="end-card" id="endCard"><div class="end-inner"><div class="end-mark">SmartHaul</div><div class="end-sub">Тот же карьер. Более обоснованные решения.</div><div class="end-caption">Цифровая модель диспетчеризации · Спасибо за внимание</div></div></div>
 <script>
-(()=>{'use strict';
-const canvas=document.getElementById('scene'),ctx=canvas.getContext('2d');let W=innerWidth,H=innerHeight,dpr=1,scene=0,paused=false,auto=true,last=performance.now(),elapsed=0,camX=0,camY=0,zoom=1,drag=null;
+(() => {
+'use strict';
+const canvas = document.getElementById('scene');
+const ctx = canvas.getContext('2d', {alpha:false});
+let W=innerWidth,H=innerHeight,DPR=1;
+function resize(){W=innerWidth;H=innerHeight;DPR=Math.min(devicePixelRatio||1,1.7);canvas.width=Math.round(W*DPR);canvas.height=Math.round(H*DPR);canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(DPR,0,0,DPR,0,0);}
+addEventListener('resize',resize);resize();
+const $ = id => document.getElementById(id);
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const mix=(a,b,t)=>a+(b-a)*t;
+const v=(x,y,z)=>({x,y,z});
+const add=(a,b)=>v(a.x+b.x,a.y+b.y,a.z+b.z);
+const sub=(a,b)=>v(a.x-b.x,a.y-b.y,a.z-b.z);
+const mul=(a,s)=>v(a.x*s,a.y*s,a.z*s);
+const dot=(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z;
+const cross=(a,b)=>v(a.y*b.z-a.z*b.y,a.z*b.x-a.x*b.z,a.x*b.y-a.y*b.x);
+const len=a=>Math.sqrt(dot(a,a))||1;
+const norm=a=>mul(a,1/len(a));
+const faces=[];
+let faceSerial=0, activeGroup=null;
+function face(points,color,stroke='rgba(9,14,13,.22)',line=0,cull=false){faces.push({points,color,stroke,line,cull,layer:faceLayer,serial:faceSerial++,group:activeGroup});}
+function withGroup(id,fn){const prev=activeGroup;activeGroup=id;try{return fn();}finally{activeGroup=prev;}}
+let faceLayer=0;
+function rgba(hex,alpha=1){let h=hex.replace('#','');if(h.length===3)h=h.split('').map(x=>x+x).join('');const n=parseInt(h,16);return `rgba(${(n>>16)&255},${(n>>8)&255},${n&255},${alpha})`;}
+function octLoop(s,y,cx=0,cz=0){const count=128;return Array.from({length:count},(_,i)=>{const p=octShapePoint(s,i/count);return v(cx+p.x,y,cz+p.z);});}
+function addBox(cx,cy,cz,sx,sy,sz,color,rot=0,opts={}){
+  const c=Math.cos(rot),s=Math.sin(rot);const pts=[];
+  for(const yy of [-1,1])for(const zz of [-1,1])for(const xx of [-1,1]){const x=xx*sx/2,z=zz*sz/2;pts.push(v(cx+x*c+z*s,cy+yy*sy/2,cz-x*s+z*c));}
+  // index = ybit*4 + zbit*2 + xbit
+  const ids=[[0,1,3,2],[4,6,7,5],[0,4,5,1],[2,3,7,6],[0,2,6,4],[1,5,7,3]];
+  const shades=[.58,.95,.72,.8,.67,1.12];
+  ids.forEach((ix,i)=>face(ix.map(j=>pts[j]),shadeColor(color,shades[i]),opts.stroke??'rgba(6,10,10,.4)',opts.line??0,true));
+}
+function shadeColor(hex,k){let h=hex.replace('#','');const n=parseInt(h,16);const r=clamp(Math.round(((n>>16)&255)*k),0,255),g=clamp(Math.round(((n>>8)&255)*k),0,255),b=clamp(Math.round((n&255)*k),0,255);return `rgb(${r},${g},${b})`;}
+function addBeam(a,b,width,depth,color){const axis=norm(sub(b,a));let side=norm(cross(axis,v(0,1,0)));if(len(side)<.01)side=v(1,0,0);const up=norm(cross(side,axis));const c=mul(add(a,b),.5);const q=[add(add(c,mul(axis,-len(sub(b,a))/2)),add(mul(side,-width/2),mul(up,-depth/2))),add(add(c,mul(axis,-len(sub(b,a))/2)),add(mul(side,width/2),mul(up,-depth/2))),add(add(c,mul(axis,len(sub(b,a))/2)),add(mul(side,width/2),mul(up,-depth/2))),add(add(c,mul(axis,len(sub(b,a))/2)),add(mul(side,-width/2),mul(up,-depth/2))),add(add(c,mul(axis,-len(sub(b,a))/2)),add(mul(side,-width/2),mul(up,depth/2))),add(add(c,mul(axis,-len(sub(b,a))/2)),add(mul(side,width/2),mul(up,depth/2))),add(add(c,mul(axis,len(sub(b,a))/2)),add(mul(side,width/2),mul(up,depth/2))),add(add(c,mul(axis,len(sub(b,a))/2)),add(mul(side,-width/2),mul(up,depth/2)))];
+ const ids=[[0,3,2,1],[4,5,6,7],[0,1,5,4],[3,7,6,2],[0,4,7,3],[1,2,6,5]];const sh=[.7,.95,.78,.85,.62,1.12];ids.forEach((ix,i)=>face(ix.map(j=>q[j]),shadeColor(color,sh[i]),'rgba(6,10,10,.35)',0,true));}
+function addGroundQuad(a,b,c,d,color,stroke='rgba(6,12,12,.2)',line=0){face([a,b,c,d],color,stroke,line);}
+function addRing(loopA,loopB,colorA,colorB,sloped=false){for(let i=0;i<Math.min(loopA.length,loopB.length);i++){const j=(i+1)%Math.min(loopA.length,loopB.length);const ca=Array.isArray(colorA)?colorA[i%colorA.length]:colorA;const cb=Array.isArray(colorB)?colorB[i%colorB.length]:colorB;const color=(i%2===0?ca:cb);face([loopA[i],loopA[j],loopB[j],loopB[i]],color,'rgba(15,19,15,.27)',.5);}}
+function addRoad(path,width=3.5,color='#585e5c',center='#d1c9a6'){
+  if(!path || path.length<2)return;
+  const outerA=[],outerB=[],innerA=[],innerB=[];
+  // The road is a raised ribbon over the wall-cut corridor. Three non-overlapping strips avoid coplanar z-fighting.
+  for(let i=0;i<path.length;i++){
+    const prev=path[Math.max(0,i-1)],next=path[Math.min(path.length-1,i+1)];
+    const dx=next.x-prev.x,dz=next.z-prev.z,n=Math.hypot(dx,dz)||1;
+    const px=-dz/n,pz=dx/n;
+    outerA.push(v(path[i].x+px*width*.58,path[i].y-.025,path[i].z+pz*width*.58));
+    outerB.push(v(path[i].x-px*width*.58,path[i].y-.025,path[i].z-pz*width*.58));
+    innerA.push(v(path[i].x+px*width*.50,path[i].y+.012,path[i].z+pz*width*.50));
+    innerB.push(v(path[i].x-px*width*.50,path[i].y+.012,path[i].z-pz*width*.50));
+  }
+  for(let i=0;i<path.length-1;i++){
+    // Left shoulder, paved deck, right shoulder: polygons share only edges, never overlapping areas.
+    face([outerA[i],outerA[i+1],innerA[i+1],innerA[i]],'#343b39','rgba(8,11,10,.22)',0,false);
+    face([innerA[i],innerA[i+1],innerB[i+1],innerB[i]],color,'rgba(9,12,10,.12)',0,false);
+    face([innerB[i],innerB[i+1],outerB[i+1],outerB[i]],'#343b39','rgba(8,11,10,.22)',0,false);
+  }
+  // Dashed centre markings are fixed in world space and lifted above the road deck.
+  for(let i=0;i<path.length-1;i+=8){
+    const a=path[i],b=path[Math.min(path.length-1,i+4)];
+    const dx=b.x-a.x,dz=b.z-a.z,n=Math.hypot(dx,dz)||1,px=-dz/n,pz=dx/n;
+    const ax=mix(a.x,b.x,.18),az=mix(a.z,b.z,.18),bx=mix(a.x,b.x,.82),bz=mix(a.z,b.z,.82);
+    const ay=mix(a.y,b.y,.18)+.035,by=mix(a.y,b.y,.82)+.035;
+    face([v(ax+px*.06,ay,az+pz*.06),v(bx+px*.06,by,bz+pz*.06),v(bx-px*.06,by,bz-pz*.06),v(ax-px*.06,ay,az-pz*.06)],center,'rgba(0,0,0,0)',0,false);
+  }
+}
+function addExcavator(x,y,z,rot=0,scale=1){
+  addBox(x,y+.42*scale,z,4.7*scale,.62*scale,2.35*scale,'#303a3a',rot);
+  for(const side of [-1,1]){
+    addBox(x,y+.36*scale,z+side*.96*scale,4.5*scale,.48*scale,.34*scale,'#151c1b',rot);
+    for(let k=0;k<6;k++){const lx=(k-2.5)*.65;const xx=x+lx*Math.cos(rot);const zz=z-lx*Math.sin(rot)+side*.98*scale;addBox(xx,y+.35*scale,zz,.36*scale,.5*scale,.4*scale,'#4c5855',rot);}
+  }
+  addBox(x-.3*scale,y+1.1*scale,z,.95*scale,.85*scale,1.15*scale,'#c99b42',rot);
+  addBox(x-.48*scale,y+1.63*scale,z-.08*scale,.9*scale,.72*scale,.95*scale,'#e3b94e',rot);
+  addBox(x-.5*scale,y+1.7*scale,z-.56*scale,.5*scale,.35*scale,.08*scale,'#6f9c9c',rot);
+  const a=v(x+.25*scale,y+1.55*scale,z+.1*scale),b=v(x+2.0*scale,y+2.55*scale,z+.16*scale),c=v(x+3.4*scale,y+1.45*scale,z+.2*scale),d=v(x+3.95*scale,y+1.12*scale,z+.2*scale);
+  addBeam(a,b,.42*scale,.38*scale,'#d6a844');addBeam(b,c,.32*scale,.3*scale,'#e0b548');addBeam(c,d,.55*scale,.34*scale,'#303d3a');
+  addBeam(v(x+.4*scale,y+1.52*scale,z+.22*scale),v(x+1.96*scale,y+2.43*scale,z+.22*scale),.12*scale,.12*scale,'#8f9b8e');
+}
+function addCrusher(x,y,z){
+  addBox(x,y+1.1,z,7.2,2.2,5.2,'#465150');addBox(x-.4,y+2.65,z-.1,4.6,1.1,4.2,'#313e40');
+  addBox(x+2.7,y+1.7,z+1.3,1.4,3.3,1.4,'#6f7e79');addBox(x+2.7,y+3.45,z+1.3,1.8,.25,1.8,'#b8c6bb');
+  for(let i=0;i<3;i++)addBox(x-2.0+i*1.9,y+1.85,z-2.1,.85,1.1,.25,'#1a2728');
+  addBeam(v(x-9,y+.65,z+5),v(x-2,y+2.05,z+3.1),1.1,.6,'#5e716d');
+  addBox(x-6.8,y+1.35,z+4.1,2.0,.18,1.45,'#858f85',-.2);
+}
+function makePath(coords){return coords.map(a=>v(a[0],a[1],a[2]));}
+const mineLevels=[{s:1,y:12},{s:.86,y:12},{s:.75,y:9},{s:.64,y:9},{s:.53,y:6},{s:.42,y:6},{s:.31,y:3},{s:.20,y:3},{s:.105,y:0}];
+const MINE_X=62.4,MINE_Z=44.4;
+const octVertices=[[-62.4,-25.308],[-35.568,-44.4],[35.568,-44.4],[62.4,-25.308],[62.4,25.308],[35.568,44.4],[-35.568,44.4],[-62.4,25.308]];
+function octShapePoint(scale,u){
+  const q=((u%1)+1)%1*8,i=Math.floor(q),t=q-i;
+  const p0=octVertices[(i+7)%8],p1=octVertices[i%8],p2=octVertices[(i+1)%8],p3=octVertices[(i+2)%8];
+  const cat=(a,b,c,d)=>.5*((2*b)+(-a+c)*t+(2*a-5*b+4*c-d)*t*t+(-a+3*b-3*c+d)*t*t*t);
+  return {x:cat(p0[0],p1[0],p2[0],p3[0])*scale,z:cat(p0[1],p1[1],p2[1],p3[1])*scale};
+}
+// Inverse map from a world-space bearing back to the exact smoothed contour used by the terrain.
+const contourAngles=[];let previousAngle=-Infinity;
+for(let i=0;i<=1024;i++){
+  const u=i/1024,p=octShapePoint(1,u);let angle=Math.atan2(p.z/MINE_Z,p.x/MINE_X);
+  while(angle<=previousAngle)angle+=Math.PI*2;
+  contourAngles.push({u,angle,rx:p.x/MINE_X,rz:p.z/MINE_Z});previousAngle=angle;
+}
+function radialScaleAt(x,z){
+  const X=x/MINE_X,Z=z/MINE_Z,r=Math.hypot(X,Z);if(r<1e-9)return .105;
+  let angle=Math.atan2(Z,X),base=contourAngles[0].angle;
+  while(angle<base)angle+=Math.PI*2;
+  while(angle>=base+Math.PI*2)angle-=Math.PI*2;
+  let lo=0,hi=contourAngles.length-1;
+  while(lo<hi){const mid=(lo+hi)>>1;if(contourAngles[mid].angle<angle)lo=mid+1;else hi=mid;}
+  const b=contourAngles[lo],a=contourAngles[Math.max(0,lo-1)],span=b.angle-a.angle||1,t=clamp((angle-a.angle)/span,0,1),u=mix(a.u,b.u,t),p=octShapePoint(1,u),baseR=Math.hypot(p.x/MINE_X,p.z/MINE_Z)||1;
+  return r/baseR;
+}
+function terrainYForScale(scale){
+  const r=clamp(scale,.105,1.15);
+  if(r>=1)return 12;
+  for(let i=0;i<mineLevels.length-1;i++){
+    const hi=mineLevels[i],lo=mineLevels[i+1];
+    if(r<=hi.s+1e-9&&r>=lo.s-1e-9){const t=(r-lo.s)/(hi.s-lo.s);return mix(lo.y,hi.y,clamp(t,0,1));}
+  }
+  return 0;
+}
+function terrainYAt(x,z){return terrainYForScale(radialScaleAt(x,z));}
+function octPoint(scale,u){
+  // Terrain rings and the road use the same rounded contour, so a route at a given scale sits on the corresponding bench.
+  const p=octShapePoint(scale,u);return v(p.x,terrainYForScale(scale),p.z);
+}
+function pointAtScaleU(scale,u,lift=.18){const p=octPoint(scale,u);p.y=terrainYForScale(scale)+lift;return p;}
+function appendPoint(path,p){if(!path.length||len(sub(path[path.length-1],p))>.015)path.push(p);}
+function appendConnector(path,s0,s1,u,steps=16){for(let k=1;k<=steps;k++){const t=k/steps;appendPoint(path,pointAtScaleU(mix(s0,s1,t),u,.18));}}
+function appendSpiralLoop(path,s0,s1,u0,direction=-1,turns=1,stepsPerTurn=112){
+  const steps=Math.max(2,Math.round(stepsPerTurn*turns));
+  const first=path.length-1;
+  for(let k=1;k<=steps;k++){const t=k/steps;appendPoint(path,pointAtScaleU(mix(s0,s1,t),u0+direction*turns*t,.18));}
+  return {start:Math.max(0,first),end:path.length-1};
+}
+const LOAD_SCALE=.25,LOAD_U=.678,CRUSHER_SCALE=.75,CRUSHER_U=.334,UPPER_SCALE=.70;
+// A continuous, three-turn-plus ramp links the pit floor to the crusher shelf. The wider footprint keeps adjacent road passes clear while the maximum grade stays below 6%.
+const ROUTE_TURNS=3+LOAD_U-CRUSHER_U,ROUTE_STEPS=720;
+const UPPER_U=LOAD_U-ROUTE_TURNS*((UPPER_SCALE-LOAD_SCALE)/(CRUSHER_SCALE-LOAD_SCALE));
+const loadStation=pointAtScaleU(LOAD_SCALE,LOAD_U,0);
+const crusherStation=pointAtScaleU(CRUSHER_SCALE,CRUSHER_U,0);
+const upperStation=pointAtScaleU(UPPER_SCALE,UPPER_U,0);
+const pathStages={};
+function buildOutboundPath(){
+  // A continuous spiral is used instead of separate radial connectors and rings. That prevents right-angle joints and uphill jumps.
+  const path=[];
+  for(let i=0;i<=ROUTE_STEPS;i++){
+    const t=i/ROUTE_STEPS,scale=mix(LOAD_SCALE,CRUSHER_SCALE,t),u=LOAD_U-ROUTE_TURNS*t;
+    path.push(pointAtScaleU(scale,u,.18));
+  }
+  const indexForScale=scale=>clamp(Math.round((scale-LOAD_SCALE)/(CRUSHER_SCALE-LOAD_SCALE)*ROUTE_STEPS),0,ROUTE_STEPS);
+  pathStages.lowerRamp={start:indexForScale(.31),end:indexForScale(.42)};
+  pathStages.midBench={start:indexForScale(.42),end:indexForScale(.53)};
+  pathStages.upperRamp={start:indexForScale(.53),end:indexForScale(.64)};
+  pathStages.upperBench={start:indexForScale(.64),end:indexForScale(.75)};
+  return path;
+}
+const mainPath=buildOutboundPath();
+function pathCumulative(points){const cumulative=[0];for(let i=1;i<points.length;i++)cumulative.push(cumulative[i-1]+len(sub(points[i],points[i-1])));return {points,cumulative,length:cumulative[cumulative.length-1]||1};}
+function samplePolyline(poly,distance){
+  const data=poly.cumulative?poly:pathCumulative(poly),pts=data.points,cum=data.cumulative;
+  const target=clamp(distance,0,data.length);let lo=0,hi=cum.length-1;
+  while(lo<hi){const mid=(lo+hi)>>1;if(cum[mid]<target)lo=mid+1;else hi=mid;}
+  const i=Math.max(1,lo),a=pts[i-1],b=pts[i],span=cum[i]-cum[i-1]||1,t=clamp((target-cum[i-1])/span,0,1);
+  const p=v(mix(a.x,b.x,t),mix(a.y,b.y,t),mix(a.z,b.z,t));
+  return {p,heading:Math.atan2(-(b.z-a.z),b.x-a.x)};
+}
+function offsetPath(points,offset){
+  return points.map((p,i)=>{const a=points[Math.max(0,i-1)],b=points[Math.min(points.length-1,i+1)],dx=b.x-a.x,dz=b.z-a.z,n=Math.hypot(dx,dz)||1,px=-dz/n,pz=dx/n,x=p.x+px*offset,z=p.z+pz*offset;return v(x,p.y,z);});
+}
+function makeTurnaround(center,fromHeading,offset,atEnd){
+  const points=[],t=v(Math.cos(fromHeading),-0, -Math.sin(fromHeading));
+  const a=sampleTangentFromHeading(fromHeading),normal=v(-a.z,0,a.x);const steps=24;
+  for(let i=0;i<=steps;i++){
+    const theta=Math.PI*i/steps;let x,z;
+    if(atEnd){x=center.x+offset*(normal.x*Math.cos(theta)+a.x*Math.sin(theta));z=center.z+offset*(normal.z*Math.cos(theta)+a.z*Math.sin(theta));}
+    else{x=center.x+offset*(-normal.x*Math.cos(theta)-a.x*Math.sin(theta));z=center.z+offset*(-normal.z*Math.cos(theta)-a.z*Math.sin(theta));}
+    points.push(v(x,center.y,z));
+  }
+  return points;
+}
+function sampleTangentFromHeading(h){return v(Math.cos(h),0,-Math.sin(h));}
+function createTrafficCycle(centerline){
+  const centerData=pathCumulative(centerline),out=offsetPath(centerline,1.30),retForward=offsetPath(centerline,-1.30),ret=retForward.slice().reverse();
+  const first=samplePolyline(centerData,0),last=samplePolyline(centerData,centerData.length);
+  const topTurn=makeTurnaround(centerline[centerline.length-1],last.heading,1.30,true);
+  const bottomTurn=makeTurnaround(centerline[0],first.heading,1.30,false);
+  const points=[];out.forEach(p=>appendPoint(points,p));topTurn.slice(1).forEach(p=>appendPoint(points,p));ret.slice(1).forEach(p=>appendPoint(points,p));bottomTurn.slice(1).forEach(p=>appendPoint(points,p));
+  // Force a closed loop; otherwise even a tiny endpoint gap becomes a visible teleport on wrap.
+  points[points.length-1]=v(points[0].x,points[0].y,points[0].z);
+  const route=pathCumulative(points),outData=pathCumulative(out);
+  return {centerline,points:route.points,cumulative:route.cumulative,length:route.length,outbound:outData,outCumulative:outData.cumulative,outLength:outData.length,topTurnLength:pathCumulative(topTurn).length,returnStart:outData.length+pathCumulative(topTurn).length};
+}
+function makeClosureVariant(path,range){
+  const variant=path.map(p=>v(p.x,p.y,p.z));
+  const start=Math.max(range.start+4,0),end=Math.min(range.end-4,path.length-1);
+  for(let i=start;i<=end;i++){
+    const t=(i-start)/Math.max(1,end-start),amount=2.0*Math.pow(Math.sin(Math.PI*t),1.15);
+    const p=path[i],r=Math.hypot(p.x/MINE_X,p.z/MINE_Z)||1,x=p.x+(p.x/MINE_X)/r*amount,z=p.z+(p.z/MINE_Z)/r*amount;
+    variant[i]=v(x,p.y,z);
+  }
+  return variant;
+}
+const closurePath=makeClosureVariant(mainPath,pathStages.midBench);
+const baseCycle=createTrafficCycle(mainPath),closureCycle=createTrafficCycle(closurePath);
+const BROKEN_PROGRESS=baseCycle.outLength*.48;
+const brokenStation=samplePolyline(baseCycle,BROKEN_PROGRESS).p;
+const closureFocusIndex=Math.floor((pathStages.midBench.start+pathStages.midBench.end)/2),closureFocus=mainPath[closureFocusIndex];
+const UPPER_TARGET=pointAtScaleU(UPPER_SCALE,UPPER_U,0);
+const LOAD_TARGET=pointAtScaleU(LOAD_SCALE,LOAD_U,0);
+const CRUSHER_TARGET=pointAtScaleU(CRUSHER_SCALE,CRUSHER_U,0);
+window.__SMART_HAUL_TOUR_DEBUG__={mainPath,closurePath,pathStages,baseCycle,closureCycle,terrainYAt,terrainYForScale,radialScaleAt,loadStation,crusherStation,upperStation,brokenStation};
+const ROAD_WIDTH=5.0,ROAD_SHOULDER_HALF=ROAD_WIDTH*.58,TERRAIN_CUT_RADIUS=ROAD_SHOULDER_HALF+.03;
+function pointSegmentDistanceSq3D(px,py,pz,a,b){
+  const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,l2=dx*dx+dy*dy+dz*dz||1;
+  const t=clamp(((px-a.x)*dx+(py-a.y)*dy+(pz-a.z)*dz)/l2,0,1);
+  const x=a.x+t*dx,y=a.y+t*dy,z=a.z+t*dz;
+  return (px-x)*(px-x)+(py-y)*(py-y)+(pz-z)*(pz-z);
+}
+function nearMainRoad3D(x,y,z,limit=TERRAIN_CUT_RADIUS){
+  const lim2=limit*limit;
+  for(let i=0;i<mainPath.length-1;i++){
+    const a=mainPath[i],b=mainPath[i+1];
+    // Cheap 3D bounding-box rejects. A road cuts only the bench wall it actually passes through,
+    // not every elevation that happens to share the same X/Z coordinates.
+    if(x<Math.min(a.x,b.x)-limit||x>Math.max(a.x,b.x)+limit||
+       y<Math.min(a.y,b.y)-limit||y>Math.max(a.y,b.y)+limit||
+       z<Math.min(a.z,b.z)-limit||z>Math.max(a.z,b.z)+limit)continue;
+    if(pointSegmentDistanceSq3D(x,y,z,a,b)<=lim2)return true;
+  }
+  return false;
+}
+function addCarvedTerrainBand(sOuter,yOuter,sInner,yInner,outerColors,innerColors,bandIndex){
+  // Subdivide the bench wall in radius. Cells beneath the haul-road footprint are omitted,
+  // creating an actual corridor rather than painting the road over solid rock.
+  const n=128,radialSubdivisions=5;
+  for(let radial=0;radial<radialSubdivisions;radial++){
+    const ta=radial/radialSubdivisions,tb=(radial+1)/radialSubdivisions;
+    const sa=mix(sOuter,sInner,ta),sb=mix(sOuter,sInner,tb),ya=mix(yOuter,yInner,ta),yb=mix(yOuter,yInner,tb);
+    for(let i=0;i<n;i++){
+      const u0=i/n,u1=(i+1)/n;
+      const p0=octShapePoint(sa,u0),p1=octShapePoint(sa,u1),p2=octShapePoint(sb,u1),p3=octShapePoint(sb,u0);
+      const cx=(p0.x+p1.x+p2.x+p3.x)/4,cz=(p0.z+p1.z+p2.z+p3.z)/4;
+      const cy=(ya+yb)/2;if(nearMainRoad3D(cx,cy,cz))continue;
+      const quad=[v(p0.x,ya,p0.z),v(p1.x,ya,p1.z),v(p2.x,yb,p2.z),v(p3.x,yb,p3.z)];
+      const ca=outerColors[(i+bandIndex)%outerColors.length],cb=innerColors[(i+radial+bandIndex)%innerColors.length];
+      face(quad,(i+radial)%2===0?ca:cb,'rgba(15,19,15,.27)',.35,false);
+    }
+  }
+}
+function addTerrainBand(sOuter,yOuter,sInner,yInner,outerColors,innerColors,bandIndex){
+  const overlapsRoad=sOuter>=LOAD_SCALE-.001&&sInner<=CRUSHER_SCALE+.001;
+  if(overlapsRoad){addCarvedTerrainBand(sOuter,yOuter,sInner,yInner,outerColors,innerColors,bandIndex);return;}
+  const a=octLoop(sOuter,yOuter),b=octLoop(sInner,yInner);addRing(a,b,outerColors,innerColors);
+}
+window.__SMART_HAUL_TOUR_DEBUG__.mineX=MINE_X;window.__SMART_HAUL_TOUR_DEBUG__.mineZ=MINE_Z;window.__SMART_HAUL_TOUR_DEBUG__.roadWidth=ROAD_WIDTH;window.__SMART_HAUL_TOUR_DEBUG__.roadShoulderHalf=ROAD_SHOULDER_HALF;window.__SMART_HAUL_TOUR_DEBUG__.nearMainRoad3D=nearMainRoad3D;
+function buildWorld(){
+  // Underlying basin / horizon
+  // No giant ground slab: avoiding a visible artificial horizon keeps the scene cinematic.
+  // Far plateau strips outside the open pit, the foreground edge intentionally stays open for visibility.
+  // Benches and descending pit walls
+  const levels=[{s:1,y:12},{s:.86,y:12},{s:.75,y:9},{s:.64,y:9},{s:.53,y:6},{s:.42,y:6},{s:.31,y:3},{s:.20,y:3},{s:.105,y:0}];
+  for(let i=0;i<levels.length-1;i++){
+    let ca,cb;if(levels[i].y===levels[i+1].y){ca=['#696957','#777563'];cb=['#6d6d5b','#82806b'];}else {ca=['#6c5e49','#78664f'];cb=['#837056','#6f604b'];}
+    addTerrainBand(levels[i].s,levels[i].y,levels[i+1].s,levels[i+1].y,ca,cb,i);
+  }
+  face(octLoop(.105,0),'#343d37','rgba(22,29,24,.7)',1);
+  // bench contour markings and subtle strata
+  for(const lv of levels){const loop=octLoop(lv.s,lv.y+.03);for(let i=0;i<loop.length;i++){const j=(i+1)%loop.length;face([loop[i],loop[j],v(loop[j].x*.994,loop[j].y,loop[j].z*.994),v(loop[i].x*.994,loop[i].y,loop[i].z*.994)],'rgba(190,177,130,.22)','rgba(0,0,0,0)',0);}}
+  // Main haul road is a separate draw layer so it stays visible where it crosses a sloped bench face.
+  faceLayer=1;withGroup('haul-road-main',()=>addRoad(mainPath,ROAD_WIDTH,'#555b56','#d7c99a'));
+  const dumpTarget=pointAtScaleU(.75,.66,0);
+  // Processing pads and machines sit above the road layer, aligned to the same bench elevation model.
+  faceLayer=2;
+  withGroup('crusher-pad',()=>addBox(CRUSHER_TARGET.x,CRUSHER_TARGET.y-.20,CRUSHER_TARGET.z,11,.4,9,'#666e5c'));
+  withGroup('dump-pad',()=>addBox(dumpTarget.x,dumpTarget.y-.20,dumpTarget.z,7,.4,6,'#5f6856'));
+  withGroup('crusher',()=>addCrusher(CRUSHER_TARGET.x,CRUSHER_TARGET.y,CRUSHER_TARGET.z));
+  withGroup('ore-stockpile',()=>{addBox(dumpTarget.x,dumpTarget.y+.25,dumpTarget.z,5.8,.5,4.6,'#777666',-.18);addBox(dumpTarget.x-1.2,dumpTarget.y+.68,dumpTarget.z-.45,4.2,.42,3.7,'#92836a',.12);addBox(dumpTarget.x+1.05,dumpTarget.y+.62,dumpTarget.z+.78,3.3,.38,2.8,'#655e50',-.25);});
+  withGroup('conveyor-supports',()=>[[CRUSHER_TARGET.x-8,CRUSHER_TARGET.y,CRUSHER_TARGET.z-5],[CRUSHER_TARGET.x+7,CRUSHER_TARGET.y,CRUSHER_TARGET.z-4],[CRUSHER_TARGET.x+5,CRUSHER_TARGET.y,CRUSHER_TARGET.z+6]].forEach(([x,y,z])=>{addBox(x,y+2.3,z,.14,4.6,.14,'#7f908a');addBox(x,y+4.7,z,.7,.18,.42,'#bec9b9');}));
+  // EX-01 stands on the upper bench; EX-02 is at the lower loading station used by the haul loop.
+  withGroup('excavator-01',()=>addExcavator(UPPER_TARGET.x,UPPER_TARGET.y-.12,UPPER_TARGET.z,.08,.88));
+  withGroup('excavator-02',()=>addExcavator(LOAD_TARGET.x,LOAD_TARGET.y-.12,LOAD_TARGET.z,-.5,.82));
+  const kiosk=pointAtScaleU(.75,.86,0);withGroup('service-kiosk',()=>{addBox(kiosk.x,kiosk.y+.28,kiosk.z,3.6,.56,2.8,'#4b5a55');addBox(kiosk.x,kiosk.y+.95,kiosk.z,1.9,1.0,1.5,'#263c3b');});
+  // Road reflectors are sparse, static, and grouped as one scene object.
+  withGroup('road-reflectors',()=>{for(let i=8;i<mainPath.length-1;i+=18){
+    const a=mainPath[i],b=mainPath[i+1],dx=b.x-a.x,dz=b.z-a.z,n=Math.hypot(dx,dz)||1,px=-dz/n,pz=dx/n;
+    for(const side of [-1,1]){const x=(a.x+b.x)/2+px*2.35*side,z=(a.z+b.z)/2+pz*2.35*side,y=(a.y+b.y)/2+.15;addBox(x,y,z,.14,.16,.14,'#a8beb5');}
+  }});
+  faceLayer=0;
+  // The distant horizon is drawn in screen space for a clean, cinematic silhouette.
+}
+buildWorld();
 const scenes=[
-['ГЛАВА 01 / 09 · ОБЗОР','Карьер — единая система','Техника, дороги и точки погрузки работают как одна транспортная система. Перемещайте камеру и исследуйте сцену.','СИМУЛЯЦИЯ АКТИВНА','C-1'],
-['ГЛАВА 02 / 09 · РЕЙС','Каждый рейс — полный цикл','Погрузка, гружёный маршрут, разгрузка и пустой возврат образуют повторяемый цикл.','ЦИКЛ ТРАНСПОРТА','C-1'],
-['ГЛАВА 03 / 09 · ПРОБЛЕМА','Очереди — скрытые потери','Если несколько самосвалов прибывают к одному узлу, ожидание растёт. Назначение нужно учитывать по всей системе.','АНАЛИЗ ОЖИДАНИЯ','Q-2'],
-['ГЛАВА 04 / 09 · АЛГОРИТМ','SmartHaul выбирает назначение','Идея диспетчеризации — учитывать расстояние, загрузку узла и доступность дороги, а не выбирать только ближайшую точку.','ЛОГИКА НАЗНАЧЕНИЯ','OPT'],
-['ГЛАВА 05 / 09 · ОБЪЕЗД','Дорога C-3 перекрыта','Недоступный сегмент отмечен красным. Движение должно перейти на разрешённый обходной путь.','СЦЕНАРИЙ: ROAD CLOSED','C-3'],
-['ГЛАВА 06 / 09 · ПОЛОМКА','Отказ одной машины — не остановка парка','HT-04 остаётся на месте, а другие самосвалы продолжают движение. Система должна учитывать доступность каждой единицы.','СЦЕНАРИЙ: BREAKDOWN','HT-04'],
-['ГЛАВА 07 / 09 · ЭФФЕКТ','Экономику нужно сравнивать честно','Сравнение до/после имеет смысл только при одинаковых исходных условиях. Числа в этой сцене — иллюстрация, не измеренный эффект.','KPI: ДЕМО-ДАННЫЕ','KPI'],
-['ГЛАВА 08 / 09 · АРХИТЕКТУРА','От модели — к цифровому двойнику','Промышленная версия требует телеметрии, модели объектов, сервиса принятия решений и проверки на OpenEgiz Stand.','ПЛАТФОРМЕННАЯ ИНТЕГРАЦИЯ НЕ ПОДТВЕРЖДЕНА','MQTT'],
-['ГЛАВА 09 / 09 · ФИНАЛ','Меньше потерь. Более ясные решения.','SmartHaul показывает, как объединить видимость транспортных процессов и сценарный анализ. Следующий шаг — проверенная интеграция с платформой и данными.','SMART HAUL · CONCEPT','END']
+ {title:'Карьер —<br>единая система',eyebrow:'Интеллектуальная диспетчеризация',desc:'Техника, дороги и точки погрузки работают в одной модели. SmartHaul помогает выбирать, куда направить следующий самосвал.',caption:'Мы показываем не просто карту. Это цифровая модель карьера, в которой решение диспетчера влияет на движение техники и стоимость перевозки.',label:'SmartHaul · Введение',side:'ОБЗОР · 01',cam:v(70,53,76),target:v(-2,5,0),duration:10,metric:{label:'Контур цифрового карьера',main:'71 <small>в конфигурации</small>',foot:'Конфигурация-ориентир; в сцене показаны 8 машин',a:'5',b:'5',al:'Зоны погрузки',bl:'Пункты разгрузки'},tag:{pos:v(-31.5,11.1,7.7),title:'ЗОНА ПОГРУЗКИ A',sub:'Экскаватор · загрузочный узел'},callout:null},
+ {title:'Каждый рейс —<br>полный цикл',eyebrow:'От погрузки до разгрузки',desc:'Время цикла складывается из загрузки, гружёного пути, разгрузки, пустого возврата и ожидания в очереди.',caption:'Один рейс — это не только движение самосвала. Время ожидания и погрузки напрямую влияет на пропускную способность всего парка.',label:'Как устроен рейс',side:'ЦИКЛ · 02',cam:v(-48,27,31),target:v(-22,7,13),duration:9,metric:{label:'Состав рейса',main:'5 <small>фаз</small>',foot:'Каждая фаза влияет на полный цикл',a:'Гружёный',b:'Пустой',al:'Путь к разгрузке',bl:'Возврат на загрузку'},tag:{pos:v(LOAD_TARGET.x,LOAD_TARGET.y+2,LOAD_TARGET.z),title:'ПОГРУЗКА',sub:'Подача ковша · формирование рейса'},callout:{title:'Полный цикл',text:'Диспетчер сравнивает не только расстояние, но и ожидаемую очередь и время до следующего рейса.',kpis:['Погрузка','Гружёный путь','Разгрузка','Возврат']}},
+ {title:'Проблема —<br>очереди и ожидание',eyebrow:'Базовое распределение',desc:'Если машины закреплены за зонами без учёта текущей нагрузки, рядом с одним экскаватором может скапливаться очередь, пока другой простаивает.',caption:'В базовом режиме самосвалы могут продолжать ехать к привычной точке даже тогда, когда там уже выросла очередь. Это время оплачивается, но не добавляет перевезённую руду.',label:'Проблема базового режима',side:'ОЧЕРЕДИ · 03',cam:v(17,49,37),target:v(-1,4,8),duration:9,metric:{label:'Что важно диспетчеру',main:'Время <small>ожидания</small>',foot:'Показатель зависит от текущего сценария',a:'Очередь',b:'Загрузка',al:'У погрузки',bl:'Экскаватора'},tag:{pos:v(UPPER_TARGET.x,UPPER_TARGET.y+2,UPPER_TARGET.z),title:'ТОЧКА ОЖИДАНИЯ',sub:'Несколько машин конкурируют за погрузку'},callout:{title:'Почему возникает очередь',text:'Пиковая нагрузка на одну точку увеличивает ожидание и снижает количество завершённых циклов за смену.',kpis:['Ожидание','Ресурс экскаватора','Пропускная способность']}},
+ {title:'SmartHaul выбирает<br>выгодное назначение',eyebrow:'Динамическая диспетчеризация',desc:'Алгоритм оценивает варианты маршрута, ожидаемую очередь и стоимость полного цикла — и сравнивает их, а не полагается на фиксированное назначение.',caption:'Решение строится на прогнозе полного цикла и расхода. В демонстрационной модели можно проследить, почему конкретная точка выбрана как более выгодная.',label:'Решение SmartHaul',side:'АЛГОРИТМ · 04',cam:v(38,26,26),target:v(2,5,3),duration:10,metric:{label:'Логика назначения',main:'Цикл <small>рейса</small>',foot:'Расстояние + очередь + время',a:'Прогноз',b:'Стоимость',al:'Время цикла',bl:'Рейса'},tag:{pos:v(upperStation.x,upperStation.y+2,upperStation.z),title:'ДИНАМИЧЕСКОЕ НАЗНАЧЕНИЕ',sub:'Сравнение вариантов до отправления'},callout:{title:'Почему выбран этот маршрут',text:'При оценке учитываются дорога, загрузка погрузочного узла и прогноз полного цикла. Итог зависит от текущих условий модели.',kpis:['Время цикла','Очередь','Расстояние']}},
+ {title:'Дорога C-3<br>перекрыта',eyebrow:'Сценарий «Что если?»',desc:'Когда участок становится недоступен, система должна исключить его из маршрута и направить транспорт через допустимый объезд.',caption:'Красная маркировка показывает закрытый сегмент. Оранжевая линия — альтернативный путь, которым могут воспользоваться отдельные самосвалы.',label:'Обработка перекрытия',side:'ИНЦИДЕНТ · 05',cam:v(43,33,49),target:v(17,4,4),duration:9,metric:{label:'Состояние сети',main:'C-3 <small>закрыт</small>',foot:'Объезд активен в демонстрационном сценарии',a:'Основной путь',b:'Объезд',al:'Недоступен',bl:'Разрешён'},tag:{pos:v(closureFocus.x,closureFocus.y+1.8,closureFocus.z),title:'УЧАСТОК C-3 ЗАКРЫТ',sub:'Движение по сегменту запрещено'},callout:{title:'Маршрут перестроен',text:'Диспетчер рассматривает объезд. Время и стоимость могут вырасти из-за дополнительного пробега — это отображается как последствие инцидента.',kpis:['Закрытый сегмент','Альтернативный путь']},event:'closure'},
+ {title:'Поломка самосвала<br>не должна остановить рейсы',eyebrow:'Реакция на неисправность',desc:'Остановленная машина выводится из доступного парка. Остальные назначения пересчитываются без учёта неисправной единицы.',caption:'SmartHaul должен учитывать доступность техники, а не отправлять новые задания машине, которая больше не может выполнять рейсы.',label:'Сценарий неисправности',side:'ИНЦИДЕНТ · 06',cam:v(-29,27,34),target:v(-14,4,11),duration:9,metric:{label:'Доступность парка',main:'7 / 8 <small>машин</small>',foot:'Один самосвал остановлен в сценарии',a:'HT-04',b:'Остальные',al:'Неисправен',bl:'Доступны'},tag:{pos:v(brokenStation.x,brokenStation.y+2.3,brokenStation.z),title:'HT-04 · ПОЛОМКА',sub:'Скорость 0 · исключён из назначения'},callout:{title:'Перераспределение парка',text:'Неисправный самосвал перестаёт принимать задания. Диспетчер обновляет доступный парк и продолжает работу с оставшимися машинами.',kpis:['7 доступных','1 неисправный']},event:'breakdown'},
+ {title:'Экономику нужно<br>сравнивать честно',eyebrow:'Одинаковые исходные условия',desc:'Базовый и оптимизированный режимы сравниваются на одной длительности смены, с одинаковым стартовым состоянием и одним набором событий.',caption:'Результаты ниже — расчёт самостоятельной демонстрационной модели, а не замер действующего карьера. Реальная экономия требует проверки на полевых данных.',label:'Сравнение режимов',side:'ЭФФЕКТ · 07',cam:v(87,65,89),target:v(0,5,0),duration:11,metric:{label:'Условия сравнения',main:'12 <small>часов смены</small>',foot:'Одинаковый seed и набор событий',a:'Базовый',b:'SmartHaul',al:'Фиксированное',bl:'Динамическое'},tag:{pos:v(0,15,0),title:'ОДИН КАРЬЕР · ДВА РЕЖИМА',sub:'Результаты рассчитаны моделью'},callout:{title:'Модельная оценка',text:'Вычисленные показатели основаны на явных допущениях симуляции. Для доказательства экономии на реальном предприятии нужны независимые полевые измерения.',kpis:['Тоннаж','Топливо','Ожидание','Цена тонны']}},
+ {title:'Как устроен<br>SmartHaul',eyebrow:'Симуляция и цифровые двойники',desc:'Диспетчер использует состояние техники и расчёт полного цикла. В контуре OpenEgiz обмен с цифровыми двойниками должен проходить через MQTT и Eclipse Ditto.',caption:'Этот тур — отдельная презентационная модель. Он не подключён к экземпляру OpenEgiz автоматически; интеграцию следует демонстрировать только после проверки сквозного обмена данными.',label:'Техническая архитектура',side:'АРХИТЕКТУРА · 08',cam:v(68,74,70),target:v(0,5,0),duration:10,metric:{label:'Контур решения',main:'MQTT <small>→ Ditto</small>',foot:'Платформенная интеграция должна проверяться отдельно',a:'Диспетчер',b:'Интерфейс',al:'Решение',bl:'Визуализация'},tag:{pos:v(CRUSHER_TARGET.x,CRUSHER_TARGET.y+4,CRUSHER_TARGET.z),title:'ДВОЙНИК УЗЛА РАЗГРУЗКИ',sub:'Технический объект модели'},callout:{title:'Цепочка данных',text:'Модель состояния → диспетчеризация → MQTT → Eclipse Ditto → UI. Этот самостоятельный тур иллюстрирует концепцию, а не подтверждает связь с OpenEgiz.',kpis:['Состояние','Решение','Телеметрия','Интерфейс']}},
+ {title:'Меньше потерь.<br>Более ясные решения.',eyebrow:'SmartHaul · Цифровой карьер',desc:'Наша цель — перевозить тот же объём материала с обоснованно меньшими затратами, используя существующий парк техники эффективнее.',caption:'SmartHaul — это способ увидеть последствия решения до его применения: оценить маршрут, очередь и доступность оборудования в единой модели карьера.',label:'Финал',side:'SMART MINE · 09',cam:v(97,73,110),target:v(0,5,0),duration:8,metric:{label:'Ценность проекта',main:'Решения <small>на данных</small>',foot:'Экономический эффект должен подтверждаться расчётом',a:'Прозрачность',b:'Сравнение',al:'Причины решения',bl:'До / после'},tag:null,callout:null,finale:true}
 ];
-function resize(){dpr=Math.min(devicePixelRatio||1,2);W=innerWidth;H=innerHeight;canvas.width=Math.round(W*dpr);canvas.height=Math.round(H*dpr);canvas.style.width=W+'px';canvas.style.height=H+'px';ctx.setTransform(dpr,0,0,dpr,0,0)}addEventListener('resize',resize);resize();
-const project=(x,y,z)=>{const scale=Math.min(W,H)*.014*zoom;const xx=x*Math.cos(camY)-z*Math.sin(camY),zz=x*Math.sin(camY)+z*Math.cos(camY);const yy=y+camX*.15;const perspective=6.7/(6.7+zz*.014);return [W*.5+xx*scale*perspective,H*.52+(yy*scale*.72-zz*scale*.35)*perspective,zz]};
-function line(points,color,width=1){ctx.beginPath();points.forEach((p,i)=>{const q=project(...p);i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1])});ctx.strokeStyle=color;ctx.lineWidth=width;ctx.stroke()}
-function poly(points,fill,stroke){ctx.beginPath();points.forEach((p,i)=>{const q=project(...p);i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1])});ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1;ctx.stroke()}}
-function terrain(){ctx.fillStyle='#111c1e';ctx.fillRect(0,0,W,H);let grad=ctx.createLinearGradient(0,0,0,H);grad.addColorStop(0,'#1b292b');grad.addColorStop(1,'#0b1113');ctx.fillStyle=grad;ctx.fillRect(0,0,W,H);
-for(let r=0;r<6;r++){let radius=11+r*5,lev=2+r*2;let pts=[];for(let i=0;i<=120;i++){let a=i/120*Math.PI*2;let rad=radius+Math.sin(a*5+r*.6)*1.2;pts.push([Math.cos(a)*rad,lev,Math.sin(a)*rad])}poly(pts,r%2?'#273335':'#202b2d','#455354');for(let i=0;i<120;i+=2){let a=i/120*Math.PI*2;line([[Math.cos(a)*radius,lev+.04,Math.sin(a)*radius],[Math.cos(a)*(radius+1.2),lev+.04,Math.sin(a)*(radius+1.2)]],'#52605e',.6)}}
-for(let i=-6;i<=6;i++){line([[i*3,0,-29],[i*3,0,29]],'#7a8c8620',.6);line([[-29,0,i*3],[29,0,i*3]],'#7a8c8620',.6)}
+// Camera targets are derived from the actual scene objects so every chapter focuses on the correct area.
+scenes[0].cam=v(70,53,76);scenes[0].target=v(0,5,0);
+scenes[1].target=v(LOAD_TARGET.x,LOAD_TARGET.y+1,LOAD_TARGET.z);scenes[1].cam=v(LOAD_TARGET.x-23,LOAD_TARGET.y+18,LOAD_TARGET.z+31);
+scenes[2].target=v(UPPER_TARGET.x,UPPER_TARGET.y+1,UPPER_TARGET.z);scenes[2].cam=v(UPPER_TARGET.x+22,UPPER_TARGET.y+17,UPPER_TARGET.z+29);
+scenes[3].target=v(upperStation.x,upperStation.y+1,upperStation.z);scenes[3].cam=v(upperStation.x+28,upperStation.y+21,upperStation.z+29);
+scenes[4].target=v(closureFocus.x,closureFocus.y,closureFocus.z);scenes[4].cam=v(closureFocus.x+42,closureFocus.y+30,closureFocus.z+50);
+scenes[5].target=v(brokenStation.x,brokenStation.y+1.1,brokenStation.z);scenes[5].cam=v(brokenStation.x-43,brokenStation.y+31,brokenStation.z+50);
+scenes[6].cam=v(83,68,92);scenes[6].target=v(0,5,0);
+scenes[7].target=v(CRUSHER_TARGET.x,CRUSHER_TARGET.y+2,CRUSHER_TARGET.z);scenes[7].cam=v(CRUSHER_TARGET.x+25,CRUSHER_TARGET.y+19,CRUSHER_TARGET.z+32);
+scenes[8].cam=v(97,73,110);scenes[8].target=v(0,5,0);
+// Deterministic demo calculation; explicit label says this is a simplified model, not a real mine measurement.
+function calculateDemo(opt){
+ const caps=[];for(let i=0;i<9;i++)caps.push(77);for(let i=0;i<29;i++)caps.push(35);for(let i=0;i<33;i++)caps.push(55);
+ // Baseline represents fixed zone assignments that overload one loading zone; SmartHaul can choose among all zones.
+ const fixedAssignments=[0,0,0,1,1,2,2,3,4,0];
+ const zones=[0,0,0,0,0];let tonnes=0,litres=0,waitSum=0,tripsSum=0,cost=0;
+ for(let i=0;i<caps.length;i++){
+  const options=[];for(let j=0;j<5;j++){
+   const dist=5.3+(((i*13+j*7)%19)*.34)+Math.abs((i%5)-j)*.56;
+   // The queue formula is shared by both modes; it depends on already allocated trucks and a reproducible demand variation.
+   const queue=2.4+zones[j]*.5+((i*3+j*2)%4)*.35;
+   options.push({j,dist,queue,score:dist*2+queue*1.7});
+  }
+  let chosen;if(opt){options.sort((a,b)=>a.score-b.score);chosen=options[0];}else chosen=options[fixedAssignments[i%fixedAssignments.length]];
+  zones[chosen.j]++;
+  const queue=chosen.queue;
+  const cycle=6.5+chosen.dist*2.02+queue;
+  const trips=Math.floor(720/cycle);
+  const fuelPer=chosen.dist*2*2.5+22;
+  tonnes+=caps[i]*trips;litres+=fuelPer*trips;waitSum+=queue*trips;tripsSum+=trips;cost+=(fuelPer*trips*300)+(cycle*trips*28);
+ }
+ return {tonnes:Math.round(tonnes),litres:Math.round(litres),wait:Math.round(waitSum/Math.max(1,tripsSum)*10)/10,trips:tripsSum,costPerT:Math.round(cost/Math.max(1,tonnes)),cost:Math.round(cost)};
 }
-function road(t){let pts=[];for(let i=0;i<=240;i++){let a=i/240*Math.PI*2;let r=19-(i/240)*10;pts.push([Math.cos(a)*r,3+(i/240)*10,Math.sin(a)*r])}line(pts,'#0b1112',8);line(pts,'#7d8881',5);line(pts,'#d7d0a35c',.8);if(scene===4){let red=pts.slice(35,62);line(red,'#ff6269',8);line(pts.slice(70,100).map(p=>[p[0]+3,p[1]+.4,p[2]-2]),'#78e7ed',3)}}
-function truck(x,y,z,a,color,id){ctx.save();const p=project(x,y,z);const p2=project(x+Math.cos(a)*.9,y,z+Math.sin(a)*.9);let ang=Math.atan2(p2[1]-p[1],p2[0]-p[0]);ctx.translate(p[0],p[1]);ctx.rotate(ang);let s=Math.min(W,H)*.0045*zoom;s=Math.max(2.2,Math.min(7,s));ctx.fillStyle='#0008';ctx.fillRect(-s*1.7,s*.55,s*3.8,s*.75);ctx.fillStyle=color;ctx.beginPath();ctx.moveTo(-s*1.8,-s*.2);ctx.lineTo(s*.7,-s*.2);ctx.lineTo(s*1.5,-s*.9);ctx.lineTo(s*2.1,-s*.9);ctx.lineTo(s*2.1,s*.3);ctx.lineTo(-s*1.8,s*.3);ctx.closePath();ctx.fill();ctx.fillStyle='#dce9e3';ctx.fillRect(s*.7,-s*.78,s*.55,s*.48);ctx.fillStyle='#18201e';for(let wx of [-s*1.15,s*.95]){ctx.beginPath();ctx.arc(wx,s*.38,s*.35,0,Math.PI*2);ctx.fill()}ctx.restore()}
-function draw(t){terrain();road(t);let trucks=[];for(let i=0;i<8;i++){let f=(t*.035+i/8)%1,a=f*Math.PI*2,r=19-f*9.5;let x=Math.cos(a)*r,z=Math.sin(a)*r,y=3+f*10;let col=scene===5&&i===3?'#ff777e':scene===4&&i===2?'#ffbd73':['#c9ff7b','#d2e4dc','#79dce7','#ffbd73'][i%4];if(scene===5&&i===3){x=-2;z=3;y=6}trucks.push({x,y,z,a,col,i,depth:project(x,y,z)[2]})}trucks.sort((a,b)=>a.depth-b.depth);trucks.forEach(v=>truck(v.x,v.y,v.z,v.a,v.col,v.i));
-for(let i=0;i<5;i++){let p=project(-17+i*8,2+i*1.8,-11+i*3);ctx.fillStyle=i%2?'#ffbd73':'#78e7ed';ctx.beginPath();ctx.arc(p[0],p[1],3.5,0,Math.PI*2);ctx.fill();ctx.fillStyle='#e4efeb';ctx.font='10px Segoe UI';ctx.fillText(i%2?'DUMP':'LOAD',p[0]+7,p[1]-6)}
-if(scene===3){line([[-14,8,5],[0,8,0],[12,12,-8]],'#c8ff79',2);let p=project(0,9,0);ctx.fillStyle='#c8ff79';ctx.font='bold 12px Segoe UI';ctx.fillText('ASSIGNMENT ENGINE',p[0]+8,p[1]-12)}
-if(scene===6){let p=project(0,11,0);ctx.fillStyle='#c8ff79';ctx.font='bold 14px Segoe UI';ctx.fillText('WAIT TIME  ↓',p[0]-25,p[1]-20);ctx.fillStyle='#ffbd73';ctx.fillText('DEMO ONLY',p[0]-20,p[1]+2)}
-if(scene===7){let nodes=[[-13,5,0],[-4,9,1],[4,11,-2],[13,6,2]];for(let i=0;i<3;i++)line([nodes[i],nodes[i+1]],'#78e7ed',2);nodes.forEach((n,i)=>{let p=project(...n);ctx.fillStyle='#78e7ed';ctx.beginPath();ctx.arc(p[0],p[1],5,0,7);ctx.fill();ctx.fillStyle='#eaf6f2';ctx.font='11px Segoe UI';ctx.fillText(['MQTT','DITTO','RULES','UI'][i],p[0]+8,p[1]-7)})}
+const baseline=calculateDemo(false), smart=calculateDemo(true);
+const pct=(a,b)=>(100*(b-a)/Math.max(1,a));
+const fmtPct=n=>`${n>0?'+':''}${n.toFixed(1).replace('.',',')}%`;
+const fuelPerTBase=baseline.litres/baseline.tonnes, fuelPerTSmart=smart.litres/smart.tonnes;
+scenes[6].metric={label:'Стоимость перевозки',main:`${smart.costPerT} <small>модельных ед./т</small>`,foot:`Базовый режим: ${baseline.costPerT} · SmartHaul: ${smart.costPerT}`,a:`${baseline.wait.toFixed(1).replace('.',',')} мин`,b:`${smart.wait.toFixed(1).replace('.',',')} мин`,al:'Ожидание · база',bl:'Ожидание · SmartHaul'};
+scenes[6].callout={title:'Итог парного прогона',text:'Одна формула времени цикла и расхода для обоих режимов. В этом сценарии фиксированное назначение неравномерно нагружает зоны; SmartHaul выбирает по ожидаемому циклу и текущей нагрузке. Это сценарная модель, а не измерение реального карьера.',kpis:[`${fmtPct(pct(baseline.tonnes,smart.tonnes))} тоннаж`,`${fmtPct(pct(baseline.costPerT,smart.costPerT))} цена/т`,`${fmtPct(pct(baseline.wait,smart.wait))} ожидание`,`${fmtPct(pct(fuelPerTBase,fuelPerTSmart))} топливо/т`]};
+scenes[6].caption=`В парном демонстрационном расчёте за 12 часов: фиксированное назначение — ${baseline.tonnes.toLocaleString('ru-RU')} т и ${baseline.costPerT} модельных ед./т; SmartHaul — ${smart.tonnes.toLocaleString('ru-RU')} т и ${smart.costPerT} модельных ед./т. Это результат допущений симулятора, не фактическая экономия предприятия.`;
+// Per-chapter framing keeps the pit and important equipment out from beneath the text/callout panels.
+scenes[1].cameraScale=1.58;scenes[2].cameraScale=1.46;scenes[3].cameraScale=1.58;scenes[4].cameraScale=1.50;scenes[5].cameraScale=1.58;scenes[6].cameraScale=1.28;scenes[7].cameraScale=1.27;scenes[8].cameraScale=1.23;
+const totalDuration=scenes.reduce((a,s)=>a+s.duration,0);
+let current=0,storyElapsed=0,playing=true,lastTime=performance.now(),worldTime=0;
+let camPos=v(70,53,76),camTarget=v(0,5,0),userYaw=0,userPitch=0,userZoom=1,dragging=false,dragLast=null,manualUntil=0;
+const camCurrent={pos:v(118,91,132),target:v(0,5,0)};
+const projectionCache={right:v(1,0,0),up:v(0,1,0),forward:v(0,0,-1)};
+function prepareProjection(pos,target){const forward=norm(sub(target,pos));let right=norm(cross(forward,v(0,1,0)));if(len(right)<.01)right=v(1,0,0);const up=norm(cross(right,forward));projectionCache.right=right;projectionCache.up=up;projectionCache.forward=forward;}
+function cameraPoint(p){const d=sub(p,camCurrent.pos);return {x:dot(d,projectionCache.right),y:dot(d,projectionCache.up),z:dot(d,projectionCache.forward)};}
+function projectCameraPoint(c){if(c.z<.8)return null;const f=Math.min(W,H)*1.08*userZoom;return {x:W/2+c.x*f/c.z,y:H*.49-c.y*f/c.z,z:c.z};}
+function project(p){return projectCameraPoint(cameraPoint(p));}
+function clipNearPlane(points,near=.8){
+  if(!points.length)return [];const out=[];let prev=points[points.length-1],prevIn=prev.z>=near;
+  for(const cur of points){const curIn=cur.z>=near;
+    if(curIn!==prevIn){const dz=cur.z-prev.z,t=(near-prev.z)/(Math.abs(dz)<1e-9?1e-9:dz);out.push({x:mix(prev.x,cur.x,t),y:mix(prev.y,cur.y,t),z:near});}
+    if(curIn)out.push(cur);prev=cur;prevIn=curIn;
+  }return out;
 }
-function setScene(n){scene=(n+scenes.length)%scenes.length;let s=scenes[scene];document.getElementById('chapterLabel').textContent=s[0];document.getElementById('headline').textContent=s[1];document.getElementById('caption').textContent=s[2];document.getElementById('pillText').textContent=s[3];document.getElementById('routeMetric').textContent=s[4];document.getElementById('modeMetric').textContent=scene===4?'REROUTE':scene===5?'FAULT':scene===7?'DESIGN':'LIVE';document.querySelectorAll('.chapter-btn').forEach((b,i)=>b.classList.toggle('active',i===scene));}
-const nav=document.getElementById('chapters');scenes.forEach((s,i)=>{let b=document.createElement('button');b.className='chapter-btn';b.textContent=String(i+1).padStart(2,'0');b.title=s[1];b.onclick=()=>{setScene(i);auto=false};nav.appendChild(b)});
-document.getElementById('prev').onclick=()=>{setScene(scene-1);auto=false};document.getElementById('next').onclick=()=>{setScene(scene+1);auto=false};document.getElementById('pause').onclick=()=>{paused=!paused;auto=!paused;document.getElementById('pause').textContent=paused?'▶ Продолжить':'Ⅱ Пауза тура'};document.getElementById('reset').onclick=()=>{camX=camY=0;zoom=1};document.getElementById('full').onclick=()=>{if(!document.fullscreenElement)document.documentElement.requestFullscreen?.();else document.exitFullscreen?.()};
-addEventListener('keydown',e=>{if(e.key==='ArrowRight'){setScene(scene+1);auto=false}else if(e.key==='ArrowLeft'){setScene(scene-1);auto=false}else if(e.code==='Space'){e.preventDefault();document.getElementById('pause').click()}else if(e.key.toLowerCase()==='r'){camX=camY=0;zoom=1}});
-canvas.addEventListener('pointerdown',e=>{drag={x:e.clientX,y:e.clientY,cx:camX,cy:camY};canvas.setPointerCapture(e.pointerId)});canvas.addEventListener('pointermove',e=>{if(drag){camY=drag.cy+(e.clientX-drag.x)*.008;camX=drag.cx+(e.clientY-drag.y)*.025}});canvas.addEventListener('pointerup',()=>drag=null);canvas.addEventListener('pointercancel',()=>drag=null);canvas.addEventListener('wheel',e=>{zoom=Math.max(.65,Math.min(1.7,zoom-e.deltaY*.001));e.preventDefault()},{passive:false});
-setScene(0);function frame(now){let dt=Math.min(.05,(now-last)/1000);last=now;if(!paused){elapsed+=dt;if(auto&&elapsed>14){elapsed=0;setScene(scene+1)}}draw(now/1000);requestAnimationFrame(frame)}requestAnimationFrame(frame);
+function drawSky(){const g=ctx.createLinearGradient(0,0,0,H);g.addColorStop(0,'#0d1925');g.addColorStop(.42,'#243943');g.addColorStop(.68,'#4a524b');g.addColorStop(1,'#0c1314');ctx.fillStyle=g;ctx.fillRect(0,0,W,H);
+ // dusk stars and remote industrial/settlement lights, fixed to horizon layer
+ for(let i=0;i<95;i++){const x=(i*7919%997)/997*W;const y=(i*2311%283)/283*(H*.32);const a=.1+((i*17)%7)/25;ctx.fillStyle=`rgba(210,235,235,${a})`;ctx.fillRect(x,y,1,1);}
+ const horizon=H*.43;
+ // Far mountain silhouettes, intentionally subtle and layered like the reference walkthrough.
+ ctx.fillStyle='#23373b';ctx.beginPath();ctx.moveTo(0,horizon+36);
+ for(let x=0;x<=W+30;x+=Math.max(20,W/34)){const y=horizon+Math.sin(x*.008)*11+Math.cos(x*.018)*8-(8+((Math.sin(x*.027)+1)*.5)*23);ctx.lineTo(x,y);}
+ ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();ctx.fill();
+ ctx.fillStyle='#15282d';ctx.beginPath();ctx.moveTo(0,horizon+58);
+ for(let x=0;x<=W+25;x+=Math.max(16,W/42)){const y=horizon+43+Math.sin(x*.013+1.6)*12+Math.cos(x*.025)*8;ctx.lineTo(x,y);}
+ ctx.lineTo(W,H);ctx.lineTo(0,H);ctx.closePath();ctx.fill();
+ // distant mine / settlement lights
+ for(let i=0;i<72;i++){const x=(i*127.3%W),y=horizon+8+(i*37%70);ctx.fillStyle=i%4===0?'rgba(255,194,117,.48)':'rgba(182,220,204,.27)';ctx.fillRect(x,y,1.6,1.6);}
+}
+function renderFaces(){
+  const projected=[];
+  for(const f of faces){
+    if(!f.points||f.points.length<3)continue;
+    if(f.cull&&f.points.length>=3){
+      const p0=f.points[0],p1=f.points[1],p2=f.points[2],normal=cross(sub(p1,p0),sub(p2,p0));
+      let c=v(0,0,0);for(const p of f.points)c=add(c,mul(p,1/f.points.length));
+      if(dot(normal,sub(camCurrent.pos,c))<=1e-8)continue;
+    }
+    const cameraPoly=clipNearPlane(f.points.map(cameraPoint));if(cameraPoly.length<3)continue;
+    const p=cameraPoly.map(projectCameraPoint);if(p.some(q=>!q||!Number.isFinite(q.x)||!Number.isFinite(q.y)))continue;
+    projected.push({f,p,depth:cameraPoly.reduce((a,q)=>a+q.z,0)/cameraPoly.length});
+  }
+  function paint(list){
+    for(const o of list){ctx.beginPath();ctx.moveTo(o.p[0].x,o.p[0].y);for(let i=1;i<o.p.length;i++)ctx.lineTo(o.p[i].x,o.p[i].y);ctx.closePath();ctx.fillStyle=o.f.color;ctx.fill();if(o.f.line){ctx.lineWidth=o.f.line;ctx.strokeStyle=o.f.stroke;ctx.stroke();}}
+  }
+  function paintLayer(list){
+    // Sort complete objects back-to-front, then their own faces. This avoids faces from neighbouring trucks
+    // interleaving as the camera eases, which caused visible one-frame flashes in the previous build.
+    const groups=new Map();
+    for(const o of list){const key=o.f.group||`__face_${o.f.serial}`;if(!groups.has(key))groups.set(key,[]);groups.get(key).push(o);}
+    const ordered=[...groups.entries()].map(([key,items])=>({key,items,depth:items.reduce((a,o)=>a+o.depth,0)/items.length,serial:Math.min(...items.map(o=>o.f.serial))}));
+    ordered.sort((a,b)=>b.depth-a.depth||a.serial-b.serial);
+    for(const g of ordered){
+      // Sort the road ribbons and each truck's faces in camera-space depth order.
+      // Stable serial order is used only as a tie-breaker for coplanar/shared-edge faces.
+      if(g.key==='haul-road-main'||g.key==='closure-detour-road'||g.key.startsWith('truck-'))g.items.sort((a,b)=>b.depth-a.depth||a.f.serial-b.f.serial);
+      else g.items.sort((a,b)=>a.f.serial-b.f.serial);
+      paint(g.items);
+    }
+  }
+  for(let layer=0;layer<=4;layer++)paintLayer(projected.filter(o=>o.f.layer===layer));
+}
+function addTruckFaces(position,heading,color,loaded,broken=false,scale=1){
+  const c=Math.cos(heading),s=Math.sin(heading);
+  const world=(x,y,z)=>v(position.x+x*c+z*s,position.y+y,position.z-x*s+z*c);
+  function box(lx,ly,lz,sx,sy,sz,col,rot=0){const p=world(lx,ly,lz);addBox(p.x,p.y,p.z,sx*scale,sy*scale,sz*scale,col,heading+rot);}
+  function wheel(lx,ly,lz){
+    const r=.345*scale,w=.24*scale,N=12,left=[],right=[];
+    for(let i=0;i<N;i++){const a=2*Math.PI*i/N,dx=Math.cos(a)*r,dy=Math.sin(a)*r;left.push(world(lx+dx,ly+dy,lz-w/2));right.push(world(lx+dx,ly+dy,lz+w/2));}
+    // Tire tread as a closed faceted cylinder. Back-facing facets/end caps are culled;
+    // drawing every side used to paint the far half over the near half as the camera moved.
+    for(let i=0;i<N;i++){const j=(i+1)%N;face([left[i],left[j],right[j],right[i]],i%3===0?'#1a201f':'#252c2a','rgba(4,7,7,.25)',0,true);}
+    face(left.slice().reverse(),'#151b1a','rgba(4,7,7,.25)',0,true);face(right,'#202725','rgba(4,7,7,.25)',0,true);
+    for(const sign of [-1,1]){
+      const z= lz+sign*(w/2+.009),hub=[];for(let i=0;i<N;i++){const a=2*Math.PI*i/N;hub.push(world(lx+Math.cos(a)*.155*scale,ly+Math.sin(a)*.155*scale,z));}
+      face(sign<0?hub.slice().reverse():hub,'#89958d','rgba(8,12,11,.55)',0,true);
+      const inner=[];for(let i=0;i<N;i++){const a=2*Math.PI*i/N;inner.push(world(lx+Math.cos(a)*.075*scale,ly+Math.sin(a)*.075*scale,z+sign*.004));}
+      face(sign<0?inner.slice().reverse():inner,'#36413d','rgba(8,12,11,.45)',0,true);
+    }
+  }
+  // Low chassis sits just above the tyres; the components no longer interpenetrate by half a wheel height.
+  box(0,.91,0,4.15,.38,1.48,'#2c3633');
+  box(2.12,.78,0,.32,.24,1.68,'#202826'); // front bumper
+  box(-2.07,.78,0,.28,.24,1.62,'#202826'); // rear bumper
+  // Four separate wheels, with a small physical clearance to the underframe.
+  for(const x of [-1.42,1.36])for(const z of [-.78,.78])wheel(x,.385,z);
+  // Open dump tray: floor and side panels (not a solid box buried through the chassis).
+  const bodyColor=broken?'#b8494e':color;
+  box(-.78,1.12,0,2.28,.12,1.35,bodyColor);
+  box(-.78,1.43,-.65,2.3,.58,.11,bodyColor);
+  box(-.78,1.43,.65,2.3,.58,.11,bodyColor);
+  box(-1.91,1.43,0,.12,.58,1.25,bodyColor);
+  box(.34,1.43,0,.12,.58,1.25,bodyColor);
+  // Load consists of stones placed inside the tray, with a slight deterministic variation per truck colour.
+  if(loaded&&!broken){
+    const stones=[[-1.36,1.40,-.30,.48,.28,.38],[-.86,1.46,.02,.52,.34,.42],[-.37,1.40,.32,.46,.28,.38],[-.92,1.58,-.28,.42,.20,.35],[-.42,1.55,.06,.38,.22,.34]];
+    for(let i=0;i<stones.length;i++){const [x,y,z,sx,sy,sz]=stones[i];box(x,y,z,sx,sy,sz,i%2?'#8b8878':'#a19d8b');}
+  }
+  // Cab, glass, grille, headlights and rear reflectors.
+  box(1.18,1.34,0,1.14,.96,1.34,broken?'#9f3942':'#d2a13e');
+  box(1.22,1.52,-.685,.69,.43,.045,broken?'#6d484b':'#6e9ba0');
+  box(1.22,1.52,.685,.69,.43,.045,broken?'#6d484b':'#6e9ba0');
+  box(1.82,1.30,0,.075,.33,.62,'#1c2726');
+  box(1.94,.99,-.48,.08,.18,.22,'#f6d77a');box(1.94,.99,.48,.08,.18,.22,'#f6d77a');
+  box(-2.0,1.04,-.47,.06,.16,.16,'#e56e56');box(-2.0,1.04,.47,.06,.16,.16,'#e56e56');
+  box(1.18,1.88,0,1.18,.13,1.38,broken?'#a83b43':'#e3b24a');
+  if(broken){
+    // Static warning beacon: no pulse/opacity animation that could be mistaken for rendering flicker.
+    box(1.18,2.02,0,.20,.14,.20,'#ff5b66');
+  }
+}
+function drawBarrierAt(point,heading){
+ const rot=heading+Math.PI/2;
+ addBox(point.x,point.y+.53,point.z,3.7,1.10,.24,'#e34d57',rot);
+ for(let i=-2;i<=2;i++)addBox(point.x+i* .86*Math.cos(rot),point.y+.88,point.z-i*.86*Math.sin(rot),.48,.18,.34,i%2===0?'#ffbf69':'#252a29',rot);
+}
+function addEventOverlay(){
+  const sc=scenes[current];
+  if(sc.event==='closure'){
+    const r=pathStages.midBench,start=Math.max(0,r.start+2),end=Math.min(closurePath.length-1,r.end-2);
+    faceLayer=2;withGroup('closure-detour-road',()=>addRoad(closurePath.slice(start,end+1),3.0,'#b98543','#ffe0a2'));
+    const mid=Math.floor((r.start+r.end)/2),p=mainPath[mid],a=mainPath[Math.max(0,mid-3)],b=mainPath[Math.min(mainPath.length-1,mid+3)];
+    const heading=Math.atan2(-(b.z-a.z),b.x-a.x);
+    faceLayer=4;withGroup('closure-barrier',()=>{
+      drawBarrierAt(p,heading);
+      for(let k=-2;k<=2;k++){const t=k*.8,n=Math.hypot(b.x-a.x,b.z-a.z)||1,nx=-(b.z-a.z)/n,nz=(b.x-a.x)/n,x=p.x+nx*t,z=p.z+nz*t;addBox(x,p.y+.15,z,.28,.34,.28,'#ffbf69');}
+    });
+  }
+  faceLayer=0;activeGroup=null;
+}
+function angleMix(a,b,t){const d=Math.atan2(Math.sin(b-a),Math.cos(b-a));return a+d*t;}
+function truckRouteState(index){
+ const speed=7.4,loadDwell=2.8,dumpDwell=2.0;
+ const eqCycle=baseCycle.length+speed*(loadDwell+dumpDwell);
+ const q=((worldTime*speed+index*eqCycle/8)%eqCycle+eqCycle)%eqCycle;
+ let mode,baseDistance,variantDistance,position,heading;
+ if(q<baseCycle.outLength){
+  mode='Гружёный рейс';baseDistance=q;
+  variantDistance=(q/baseCycle.outLength)*closureCycle.outLength;
+  const a=samplePolyline(baseCycle.outbound,baseDistance),b=samplePolyline(closureCycle.outbound,variantDistance);
+  const t=scenes[current].event==='closure'?sceneBlend:0;
+  position=v(mix(a.p.x,b.p.x,t),mix(a.p.y,b.p.y,t),mix(a.p.z,b.p.z,t));heading=angleMix(a.heading,b.heading,t);
+  if(scenes[current].event==='closure'&&t>0){const mid=pathStages.midBench,idx=Math.floor((mid.start+mid.end)/2);const brokenDist=baseCycle.outCumulative[Math.min(idx,baseCycle.outCumulative.length-1)];if(q>brokenDist-3&&q<brokenDist+3)mode='Объезд';}
+ }else if(q<baseCycle.outLength+speed*dumpDwell){
+  mode='Разгрузка';const a=samplePolyline(baseCycle.outbound,baseCycle.outLength),b=samplePolyline(closureCycle.outbound,closureCycle.outLength),t=scenes[current].event==='closure'?sceneBlend:0;position=v(mix(a.p.x,b.p.x,t),mix(a.p.y,b.p.y,t),mix(a.p.z,b.p.z,t));heading=angleMix(a.heading,b.heading,t);
+ }else if(q<baseCycle.length+speed*dumpDwell){
+  mode='Пустой возврат';baseDistance=q-speed*dumpDwell;
+  const frac=clamp((baseDistance-baseCycle.outLength)/Math.max(.001,baseCycle.length-baseCycle.outLength),0,1);
+  const a=samplePolyline(baseCycle,baseDistance),variantDistance=closureCycle.outLength+frac*(closureCycle.length-closureCycle.outLength),b=samplePolyline(closureCycle,variantDistance);
+  const t=scenes[current].event==='closure'?sceneBlend:0;
+  position=v(mix(a.p.x,b.p.x,t),mix(a.p.y,b.p.y,t),mix(a.p.z,b.p.z,t));heading=angleMix(a.heading,b.heading,t);
+ }else{
+  mode='Погрузка';position=v(baseCycle.points[0].x,baseCycle.points[0].y,baseCycle.points[0].z);heading=samplePolyline(baseCycle,0).heading;
+ }
+ const broken=scenes[current].event==='breakdown'&&index===3;
+ if(broken){const brokenRoute=samplePolyline(baseCycle,BROKEN_PROGRESS);position=brokenRoute.p;heading=brokenRoute.heading;mode='Поломка';}
+ return {position,heading,loaded:mode==='Гружёный рейс'||mode==='Объезд'||mode==='Разгрузка',broken,mode};
+}
+let sceneBlend=1;
+window.__SMART_HAUL_TOUR_DEBUG__.truckRouteState=truckRouteState;
+window.__SMART_HAUL_TOUR_DEBUG__.setScene=(i)=>gotoScene(i);
+window.__SMART_HAUL_TOUR_DEBUG__.getRuntime=()=>({current,worldTime,playing,sceneBlend,camPos:{...camCurrent.pos},camTarget:{...camCurrent.target}});
+window.__SMART_HAUL_TOUR_DEBUG__.setWorldTime=(t)=>{worldTime=Math.max(0,Number(t)||0);};
+function addDynamicObjects(){
+  faceLayer=3;
+  for(let i=0;i<8;i++)withGroup(`truck-${String(i+1).padStart(2,'0')}`,()=>{
+    const state=truckRouteState(i);
+    addTruckFaces(state.position,state.heading,i===1?'#71cfe1':'#dda84c',state.loaded,state.broken,i===0?.94:.87);
+  });
+  faceLayer=0;activeGroup=null;
+}
+function drawFocusRing(){
+  if(current!==2&&current!==3)return;
+  const p=project(v(UPPER_TARGET.x,UPPER_TARGET.y+.35,UPPER_TARGET.z));if(!p)return;
+  ctx.save();ctx.beginPath();ctx.arc(p.x,p.y,7,0,Math.PI*2);ctx.strokeStyle='rgba(183,243,106,.78)';ctx.lineWidth=1.6;ctx.stroke();ctx.restore();
+}
+function updateCamera(dt){const s=scenes[current],targetT=s.target,scale=s.cameraScale||1,offset=mul(sub(s.cam,targetT),scale),targetP=add(targetT,offset);let desiredPos=targetP;
+ if(Math.abs(userYaw)>.0001||Math.abs(userPitch)>.0001||Math.abs(userZoom-1)>.001){const base=sub(targetP,targetT);const radius=len(base);let yaw=Math.atan2(base.x,base.z)+userYaw;let pitch=Math.asin(base.y/radius)+userPitch;pitch=clamp(pitch,.12,1.12);const r=radius/userZoom;desiredPos=v(targetT.x+Math.sin(yaw)*Math.cos(pitch)*r,targetT.y+Math.sin(pitch)*r,targetT.z+Math.cos(yaw)*Math.cos(pitch)*r);}
+ const ease=1-Math.exp(-dt*1.6);camCurrent.pos=v(mix(camCurrent.pos.x,desiredPos.x,ease),mix(camCurrent.pos.y,desiredPos.y,ease),mix(camCurrent.pos.z,desiredPos.z,ease));camCurrent.target=v(mix(camCurrent.target.x,targetT.x,ease),mix(camCurrent.target.y,targetT.y,ease),mix(camCurrent.target.z,targetT.z,ease));
+ if(len(sub(camCurrent.pos,desiredPos))<.018)camCurrent.pos=v(desiredPos.x,desiredPos.y,desiredPos.z);
+ if(len(sub(camCurrent.target,targetT))<.018)camCurrent.target=v(targetT.x,targetT.y,targetT.z);
+ prepareProjection(camCurrent.pos,camCurrent.target);
+}
+function drawScene(){faces.length=staticFaces.length;}
+const staticFaces=faces.slice();
+function rebuildStatic(){faces.length=0;buildWorld();staticFaces.length=0;staticFaces.push(...faces);}
+// Build world already populated static faces above.
+function updateOverlay(){const s=scenes[current];$('sceneIndex').textContent=`ГЛАВА ${String(current+1).padStart(2,'0')} / ${String(scenes.length).padStart(2,'0')} · ${['Обзор','Рейс','Проблема','Алгоритм','Объезд','Поломка','Эффект','Архитектура','Финал'][current]}`;
+ $('eyebrow').textContent=s.eyebrow;$('sceneTitle').innerHTML=s.title;$('sceneDesc').textContent=s.desc;$('captionLabel').textContent=s.label;$('captionText').textContent=s.caption;$('captionSide').textContent=s.side;
+ $('metricLabel').textContent=s.metric.label;$('metricMain').innerHTML=s.metric.main;$('metricFoot').textContent=s.metric.foot;$('metricA').textContent=s.metric.a;$('metricB').textContent=s.metric.b;
+ $('metricALabel').textContent=s.metric.al||'Зоны погрузки';$('metricBLabel').textContent=s.metric.bl||'Пункты разгрузки';
+ if(s.tag){$('objectTag').style.display='block';$('objectTag').innerHTML=`${s.tag.title}<span class="tag-sub">${s.tag.sub}</span>`;}else $('objectTag').style.display='none';
+ if(s.callout){$('callout').style.display='block';$('calloutTitle').textContent=s.callout.title;$('calloutText').textContent=s.callout.text;$('calloutKpis').innerHTML=s.callout.kpis.map((k,i)=>`<span class="mini-kpi"><b>${String(i+1).padStart(2,'0')}</b> ${k}</span>`).join('');}else $('callout').style.display='none';
+ $('endCard').style.display=s.finale?'flex':'none';document.body.classList.toggle('finale',!!s.finale);
+ document.querySelectorAll('.chapter-dot').forEach((d,i)=>{d.classList.toggle('active',i===current);d.classList.toggle('done',i<current);});
+}
+function setupChapters(){const wrap=$('chapterDots');wrap.innerHTML='';scenes.forEach((s,i)=>{const b=document.createElement('button');b.className='chapter-dot';b.title=`${i+1}. ${s.label}`;b.setAttribute('aria-label',`Перейти к сцене ${i+1}: ${s.label}`);b.addEventListener('click',()=>gotoScene(i));wrap.appendChild(b);});}
+function gotoScene(i){current=clamp(i,0,scenes.length-1);storyElapsed=0;sceneBlend=0;userYaw=0;userPitch=0;userZoom=1;updateOverlay();updateControls();speakCurrent();}
+let voiceEnabled=false;
+function stopVoice(){if('speechSynthesis' in window)window.speechSynthesis.cancel();}
+const narration=[
+ 'Карьер, дороги, самосвалы и экскаваторы представлены в общей модели. SmartHaul связывает перемещение техники с производственными решениями.',
+ 'Рейс включает погрузку, гружёный путь, разгрузку и возвращение. Ожидание влияет на полный цикл.',
+ 'Фиксированное назначение может перегрузить одну точку, пока другая недоиспользуется. Так появляются очереди.',
+ 'SmartHaul сравнивает расстояние, очередь и прогноз цикла перед выбором погрузочного узла.',
+ 'Когда дорога закрыта, машинам нужен допустимый объезд. Это меняет длительность и стоимость перевозки.',
+ 'HT-04 остановлен и исключён из доступного парка. Остальные машины продолжают цикл.',
+ 'Базовый и умный режим рассчитаны при одинаковых условиях. Все числа демонстрационные и требуют полевой проверки.',
+ 'В конкурсной версии состояние должно проходить через MQTT и Eclipse Ditto. Этот автономный тур к OpenEgiz не подключён.',
+ 'SmartHaul показывает последствия решения до его применения — и помогает сравнивать сценарии.'
+];
+function speakCurrent(){if(!voiceEnabled||!('speechSynthesis' in window)||!('SpeechSynthesisUtterance' in window))return;stopVoice();const s=scenes[current];const utter=new SpeechSynthesisUtterance(`${s.label}. ${narration[current]||s.desc}`);utter.lang='ru-RU';utter.rate=1.05;utter.pitch=1;const voices=window.speechSynthesis.getVoices();const ru=voices.find(x=>/^ru(-|_)/i.test(x.lang))||voices.find(x=>/russian|рус/i.test(x.name));if(ru)utter.voice=ru;window.speechSynthesis.speak(utter);}
+function updateControls(){ $('playIcon').textContent=playing?'Ⅱ':'▶';$('playText').textContent=playing?'Пауза тура':'Продолжить';$('speechBtn').innerHTML=`◖ <span>Озвучка: ${voiceEnabled?'вкл.':'выкл.'}</span>`; }
+$('prevBtn').addEventListener('click',()=>gotoScene((current-1+scenes.length)%scenes.length));$('nextBtn').addEventListener('click',()=>gotoScene((current+1)%scenes.length));$('replayBtn').addEventListener('click',()=>{gotoScene(0);playing=true;updateControls();});$('playBtn').addEventListener('click',()=>{playing=!playing;if(!playing)stopVoice();else speakCurrent();updateControls();});$('resetViewBtn').addEventListener('click',()=>{userYaw=0;userPitch=0;userZoom=1;});
+$('speechBtn').addEventListener('click',()=>{voiceEnabled=!voiceEnabled;if(voiceEnabled)speakCurrent();else stopVoice();updateControls();});
+$('fullscreenBtn').addEventListener('click',async()=>{try{if(!document.fullscreenElement)await document.documentElement.requestFullscreen();else await document.exitFullscreen();}catch(e){$('fullscreenBtn').title='Полноэкранный режим недоступен в этом браузере';}});
+addEventListener('keydown',e=>{if(e.key==='ArrowRight'){gotoScene((current+1)%scenes.length);}else if(e.key==='ArrowLeft'){gotoScene((current-1+scenes.length)%scenes.length);}else if(e.code==='Space'){e.preventDefault();playing=!playing;if(!playing)stopVoice();else speakCurrent();updateControls();}else if(e.key.toLowerCase()==='r'){userYaw=0;userPitch=0;userZoom=1;}});
+canvas.addEventListener('pointerdown',e=>{dragging=true;dragLast={x:e.clientX,y:e.clientY};canvas.setPointerCapture(e.pointerId);});canvas.addEventListener('pointermove',e=>{if(!dragging||!dragLast)return;const dx=e.clientX-dragLast.x,dy=e.clientY-dragLast.y;userYaw-=dx*.005;userPitch=clamp(userPitch+dy*.003,-.42,.42);dragLast={x:e.clientX,y:e.clientY};});canvas.addEventListener('pointerup',()=>{dragging=false;dragLast=null;});canvas.addEventListener('pointercancel',()=>{dragging=false;dragLast=null;});canvas.addEventListener('wheel',e=>{e.preventDefault();userZoom=clamp(userZoom*(e.deltaY>0?.92:1.08),.72,1.65);},{passive:false});
+function updateWorldLabels(){const s=scenes[current];const tag=$('objectTag');if(s.tag){const p=project(s.tag.pos);if(p){tag.style.left=clamp(p.x,110,W-110)+'px';tag.style.top=clamp(p.y,85,H-175)+'px';}else tag.style.display='none';}}
+function updateProgress(dt){if(playing){storyElapsed+=dt;while(storyElapsed>=scenes[current].duration&&playing){storyElapsed-=scenes[current].duration;if(current<scenes.length-1){current++;sceneBlend=0;updateOverlay();speakCurrent();}else{playing=false;stopVoice();updateControls();storyElapsed=scenes[current].duration;break;}}}
+ const cumulative=scenes.slice(0,current).reduce((a,s)=>a+s.duration,0);const total=cumulative+Math.min(storyElapsed,scenes[current].duration);$('trackFill').style.width=(total/totalDuration*100)+'%';let format=n=>`${String(Math.floor(n/60)).padStart(2,'0')}:${String(Math.floor(n%60)).padStart(2,'0')}`;$('timeLabel').textContent=`${format(total)} / ${format(totalDuration)}`;}
+function frame(now){let dt=Math.min(.033,Math.max(0,(now-lastTime)/1000||.016));lastTime=now;if(playing)worldTime+=dt;sceneBlend=Math.min(1,sceneBlend+dt/1.25);updateProgress(dt);updateCamera(dt);drawSky();faces.length=0;faces.push(...staticFaces);faceLayer=0;activeGroup=null;addEventOverlay();addDynamicObjects();renderFaces();drawFocusRing();updateWorldLabels();requestAnimationFrame(frame);}
+setupChapters();updateOverlay();updateControls();
+// Set a clear label when the model data are illustrative rather than field observations.
+if(!('speechSynthesis' in window)){$('speechBtn').disabled=true;$('speechBtn').title='Озвучка не поддерживается этим браузером';$('hint').textContent='Перетаскивай для обзора · колесо мыши — масштаб · ← → — сцены · пробел — пауза';}
+setTimeout(()=>$('hint').style.opacity='0',7000);
+requestAnimationFrame(frame);
 })();
-</script></body></html>
+</script>
+</body>
+</html>
