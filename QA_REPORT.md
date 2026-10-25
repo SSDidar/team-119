@@ -1,22 +1,21 @@
-# QA checklist — SmartHaul repository
+# QA checklist — current SmartHaul repository revision
 
-This checklist distinguishes reviewed artifacts from tests that still require execution.
+This checklist records what was inspected and what still needs an actual run.
 
-## Reviewed
-- [x] Supplied ZIP contains a standalone HTML walkthrough and a QA report.
-- [x] Repository root has an interactive `index.html`.
-- [x] The root demo has scenario controls and keyboard/pointer interactions.
-- [x] README and SUBMISSION document synthetic data and platform-integration limits.
-- [x] No external JavaScript or CSS CDN is referenced by the root HTML.
+## Source review
+- [x] Root `index.html` exists and source contains nine chapter labels.
+- [x] README and SUBMISSION describe the nine chapters.
+- [x] Synthetic-data and non-operational limitations are documented.
+- [x] Presentation PDF is present in the root.
 
-## Not yet independently verified in this revision
-- [ ] Run in Chromium/Chrome and inspect the console.
-- [ ] Verify layout at desktop and mobile viewports.
-- [ ] Exercise all six scenario buttons and keyboard controls.
-- [ ] Verify reduced-motion/accessibility behavior.
+## Tests still required
+- [ ] Open the current revision in Chrome/Edge and inspect the JavaScript console.
+- [ ] Navigate all nine chapters manually and with keyboard shortcuts.
+- [ ] Test pause/resume, reset, camera drag, zoom and optional speech.
+- [ ] Check desktop and mobile viewports.
 - [ ] Run `make up` and `make example-mine` in a clean Docker environment.
-- [ ] Verify MQTT-to-Ditto-to-dashboard data flow.
-- [ ] Generate and attach platform integration test evidence.
+- [ ] Verify MQTT / Eclipse Ditto / dashboard data flow.
+- [ ] Record reproducible integration-test evidence.
 
 ## Interpretation
-This file is a checklist, not a claim that all tests passed. The standalone page is a presentation prototype with synthetic data; it is not connected to live mine telemetry or operational controls.
+This is a QA checklist, not a claim that every test passed. The supplied archive includes a separate QA report for its own walkthrough build; that report has not been independently reproduced against this repository revision. The standalone presentation is not connected to live mine telemetry or operational equipment.
