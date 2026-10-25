@@ -1,0 +1,912 @@
+{
+  "org.openegiz.samson:mine-01": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "Медный карьер «Самсон»",
+      "kind": "mine",
+      "_isType": false
+    },
+    "features": {
+      "shift": {
+        "properties": {
+          "time_s": 0,
+          "clock": "06:00",
+          "scenario": "baseline"
+        }
+      },
+      "production": {
+        "properties": {
+          "tonnes": 0.0,
+          "throughput_tph": 0.0,
+          "target_tph": 2400.0,
+          "grade_pct": 0.0
+        }
+      },
+      "fleet": {
+        "properties": {
+          "active": 6,
+          "hauling": 4,
+          "queued": 1,
+          "availability_pct": 75.0
+        }
+      },
+      "cycle": {
+        "properties": {
+          "average_s": 0.0,
+          "route_km": 0.844
+        }
+      },
+      "road": {
+        "properties": {
+          "condition": "Сухо · 2 полосы",
+          "gradient_pct": 7.1,
+          "rolling_resistance_pct": 2.5
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:road-01": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "Спиральный съезд С-01",
+      "kind": "road",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "condition": {
+        "properties": "Сухо · 2 полосы"
+      },
+      "gradient_pct": {
+        "properties": 7.1
+      },
+      "rolling_resistance_pct": {
+        "properties": 2.5
+      }
+    }
+  },
+  "org.openegiz.samson:crusher-01": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "Дробилка ДЩ-01",
+      "kind": "crusher",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "idle",
+          "label": "Ожидание"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": 126.0,
+          "y": 0.0,
+          "z": -22.0,
+          "heading_deg": 0.0
+        }
+      },
+      "throughput": {
+        "properties": {
+          "value": 0.0,
+          "unit": "t/h",
+          "rated_tph": 3000.0
+        }
+      },
+      "feed_grade": {
+        "properties": {
+          "value": 0.0,
+          "unit": "% Cu"
+        }
+      },
+      "tonnes_total": {
+        "properties": {
+          "value": 0.0,
+          "unit": "t"
+        }
+      },
+      "hopper": {
+        "properties": {
+          "value": 18.0,
+          "unit": "%"
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:excavator-00": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "Экскаватор ЭК-01",
+      "kind": "excavator",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "loading",
+          "label": "Погрузка"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": 24.0,
+          "y": -60.0,
+          "z": -18.0,
+          "heading_deg": 35
+        }
+      },
+      "face_grade": {
+        "properties": {
+          "value": 0.72,
+          "unit": "% Cu"
+        }
+      },
+      "passes_total": {
+        "properties": {
+          "value": 0,
+          "unit": "passes"
+        }
+      },
+      "bucket": {
+        "properties": {
+          "capacity_t": 12.0,
+          "cycle_s": 30.0
+        }
+      },
+      "availability": {
+        "properties": {
+          "value": 100.0,
+          "unit": "%"
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:excavator-01": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "Экскаватор ЭК-02",
+      "kind": "excavator",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "idle",
+          "label": "Ожидание"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": -22.0,
+          "y": -60.0,
+          "z": 20.0,
+          "heading_deg": 160
+        }
+      },
+      "face_grade": {
+        "properties": {
+          "value": 0.72,
+          "unit": "% Cu"
+        }
+      },
+      "passes_total": {
+        "properties": {
+          "value": 0,
+          "unit": "passes"
+        }
+      },
+      "bucket": {
+        "properties": {
+          "capacity_t": 12.0,
+          "cycle_s": 30.0
+        }
+      },
+      "availability": {
+        "properties": {
+          "value": 100.0,
+          "unit": "%"
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:truck-01": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "КАМАЗ СМ-01",
+      "kind": "truck",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "loading",
+          "label": "Погрузка"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": 24.0,
+          "y": -60.0,
+          "z": -15.0,
+          "heading_deg": 109.4
+        }
+      },
+      "speed": {
+        "properties": {
+          "value": 0.0,
+          "unit": "km/h"
+        }
+      },
+      "payload": {
+        "properties": {
+          "value": 0.0,
+          "unit": "t",
+          "capacity_t": 60.0
+        }
+      },
+      "grade": {
+        "properties": {
+          "value": 0.0,
+          "unit": "% Cu"
+        }
+      },
+      "fuel": {
+        "properties": {
+          "value": 93.1,
+          "unit": "%"
+        }
+      },
+      "route": {
+        "properties": {
+          "value": 0.0,
+          "progress_pct": 0.0,
+          "grade_pct": 7.1
+        }
+      },
+      "trips_total": {
+        "properties": {
+          "value": 0,
+          "unit": "trips"
+        }
+      },
+      "wait": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "cycle": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "dispatch": {
+        "properties": {
+          "excavator": 1,
+          "active": true
+        }
+      },
+      "identity": {
+        "properties": {
+          "model": "КАМАЗ-65805 Самсон",
+          "call_sign": "СМ-01"
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:truck-02": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "КАМАЗ СМ-02",
+      "kind": "truck",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "hauling",
+          "label": "Гружёный · подъём"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": 23.291,
+          "y": -43.636,
+          "z": 44.855,
+          "heading_deg": -56.03
+        }
+      },
+      "speed": {
+        "properties": {
+          "value": 0.0,
+          "unit": "km/h"
+        }
+      },
+      "payload": {
+        "properties": {
+          "value": 60.0,
+          "unit": "t",
+          "capacity_t": 60.0
+        }
+      },
+      "grade": {
+        "properties": {
+          "value": 0.695,
+          "unit": "% Cu"
+        }
+      },
+      "fuel": {
+        "properties": {
+          "value": 75.8,
+          "unit": "%"
+        }
+      },
+      "route": {
+        "properties": {
+          "value": 0.24,
+          "progress_pct": 24.0,
+          "grade_pct": 7.1
+        }
+      },
+      "trips_total": {
+        "properties": {
+          "value": 0,
+          "unit": "trips"
+        }
+      },
+      "wait": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "cycle": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "dispatch": {
+        "properties": {
+          "excavator": 2,
+          "active": true
+        }
+      },
+      "identity": {
+        "properties": {
+          "model": "КАМАЗ-65805 Самсон",
+          "call_sign": "СМ-02"
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:truck-03": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "КАМАЗ СМ-03",
+      "kind": "truck",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "hauling",
+          "label": "Гружёный · подъём"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": 79.291,
+          "y": -14.318,
+          "z": -9.627,
+          "heading_deg": 11.07
+        }
+      },
+      "speed": {
+        "properties": {
+          "value": 0.0,
+          "unit": "km/h"
+        }
+      },
+      "payload": {
+        "properties": {
+          "value": 60.0,
+          "unit": "t",
+          "capacity_t": 60.0
+        }
+      },
+      "grade": {
+        "properties": {
+          "value": 0.71,
+          "unit": "% Cu"
+        }
+      },
+      "fuel": {
+        "properties": {
+          "value": 77.2,
+          "unit": "%"
+        }
+      },
+      "route": {
+        "properties": {
+          "value": 0.67,
+          "progress_pct": 67.0,
+          "grade_pct": 7.1
+        }
+      },
+      "trips_total": {
+        "properties": {
+          "value": 0,
+          "unit": "trips"
+        }
+      },
+      "wait": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "cycle": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "dispatch": {
+        "properties": {
+          "excavator": 1,
+          "active": true
+        }
+      },
+      "identity": {
+        "properties": {
+          "model": "КАМАЗ-65805 Самсон",
+          "call_sign": "СМ-03"
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:truck-04": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "КАМАЗ СМ-04",
+      "kind": "truck",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "returning",
+          "label": "Порожний · спуск"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": 68.413,
+          "y": -10.909,
+          "z": 35.117,
+          "heading_deg": 157.13
+        }
+      },
+      "speed": {
+        "properties": {
+          "value": 0.0,
+          "unit": "km/h"
+        }
+      },
+      "payload": {
+        "properties": {
+          "value": 0.0,
+          "unit": "t",
+          "capacity_t": 60.0
+        }
+      },
+      "grade": {
+        "properties": {
+          "value": 0.0,
+          "unit": "% Cu"
+        }
+      },
+      "fuel": {
+        "properties": {
+          "value": 76.5,
+          "unit": "%"
+        }
+      },
+      "route": {
+        "properties": {
+          "value": 0.72,
+          "progress_pct": 72.0,
+          "grade_pct": 7.1
+        }
+      },
+      "trips_total": {
+        "properties": {
+          "value": 0,
+          "unit": "trips"
+        }
+      },
+      "wait": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "cycle": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "dispatch": {
+        "properties": {
+          "excavator": 2,
+          "active": true
+        }
+      },
+      "identity": {
+        "properties": {
+          "model": "КАМАЗ-65805 Самсон",
+          "call_sign": "СМ-04"
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:truck-05": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "КАМАЗ СМ-05",
+      "kind": "truck",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "queued_crusher",
+          "label": "Очередь на разгрузку"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": 128.678,
+          "y": 0.0,
+          "z": -19.914,
+          "heading_deg": 114.4
+        }
+      },
+      "speed": {
+        "properties": {
+          "value": 0.0,
+          "unit": "km/h"
+        }
+      },
+      "payload": {
+        "properties": {
+          "value": 60.0,
+          "unit": "t",
+          "capacity_t": 60.0
+        }
+      },
+      "grade": {
+        "properties": {
+          "value": 0.71,
+          "unit": "% Cu"
+        }
+      },
+      "fuel": {
+        "properties": {
+          "value": 87.3,
+          "unit": "%"
+        }
+      },
+      "route": {
+        "properties": {
+          "value": 1.0,
+          "progress_pct": 100.0,
+          "grade_pct": 0.0
+        }
+      },
+      "trips_total": {
+        "properties": {
+          "value": 0,
+          "unit": "trips"
+        }
+      },
+      "wait": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "cycle": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "dispatch": {
+        "properties": {
+          "excavator": 1,
+          "active": true
+        }
+      },
+      "identity": {
+        "properties": {
+          "model": "КАМАЗ-65805 Самсон",
+          "call_sign": "СМ-05"
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:truck-06": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "КАМАЗ СМ-06",
+      "kind": "truck",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "returning",
+          "label": "Порожний · спуск"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": -49.76,
+          "y": -34.091,
+          "z": 20.261,
+          "heading_deg": 28.31
+        }
+      },
+      "speed": {
+        "properties": {
+          "value": 0.0,
+          "unit": "km/h"
+        }
+      },
+      "payload": {
+        "properties": {
+          "value": 0.0,
+          "unit": "t",
+          "capacity_t": 60.0
+        }
+      },
+      "grade": {
+        "properties": {
+          "value": 0.0,
+          "unit": "% Cu"
+        }
+      },
+      "fuel": {
+        "properties": {
+          "value": 91.1,
+          "unit": "%"
+        }
+      },
+      "route": {
+        "properties": {
+          "value": 0.38,
+          "progress_pct": 38.0,
+          "grade_pct": 7.1
+        }
+      },
+      "trips_total": {
+        "properties": {
+          "value": 0,
+          "unit": "trips"
+        }
+      },
+      "wait": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "cycle": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "dispatch": {
+        "properties": {
+          "excavator": 2,
+          "active": true
+        }
+      },
+      "identity": {
+        "properties": {
+          "model": "КАМАЗ-65805 Самсон",
+          "call_sign": "СМ-06"
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:truck-07": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "КАМАЗ СМ-07",
+      "kind": "truck",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "standby",
+          "label": "Резерв"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": -5.912,
+          "y": -60.0,
+          "z": -33.637,
+          "heading_deg": 109.4
+        }
+      },
+      "speed": {
+        "properties": {
+          "value": 0.0,
+          "unit": "km/h"
+        }
+      },
+      "payload": {
+        "properties": {
+          "value": 0.0,
+          "unit": "t",
+          "capacity_t": 60.0
+        }
+      },
+      "grade": {
+        "properties": {
+          "value": 0.0,
+          "unit": "% Cu"
+        }
+      },
+      "fuel": {
+        "properties": {
+          "value": 96.6,
+          "unit": "%"
+        }
+      },
+      "route": {
+        "properties": {
+          "value": 0.0,
+          "progress_pct": 0.0,
+          "grade_pct": 7.1
+        }
+      },
+      "trips_total": {
+        "properties": {
+          "value": 0,
+          "unit": "trips"
+        }
+      },
+      "wait": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "cycle": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "dispatch": {
+        "properties": {
+          "excavator": 1,
+          "active": false
+        }
+      },
+      "identity": {
+        "properties": {
+          "model": "КАМАЗ-65805 Самсон",
+          "call_sign": "СМ-07"
+        }
+      }
+    }
+  },
+  "org.openegiz.samson:truck-08": {
+    "policyId": "default:basic_policy",
+    "attributes": {
+      "name": "КАМАЗ СМ-08",
+      "kind": "truck",
+      "_isType": false,
+      "_parents": "org.openegiz.samson:mine-01"
+    },
+    "features": {
+      "state": {
+        "properties": {
+          "value": "standby",
+          "label": "Резерв"
+        }
+      },
+      "position": {
+        "properties": {
+          "x": -5.912,
+          "y": -60.0,
+          "z": -33.637,
+          "heading_deg": 109.4
+        }
+      },
+      "speed": {
+        "properties": {
+          "value": 0.0,
+          "unit": "km/h"
+        }
+      },
+      "payload": {
+        "properties": {
+          "value": 0.0,
+          "unit": "t",
+          "capacity_t": 60.0
+        }
+      },
+      "grade": {
+        "properties": {
+          "value": 0.0,
+          "unit": "% Cu"
+        }
+      },
+      "fuel": {
+        "properties": {
+          "value": 85.3,
+          "unit": "%"
+        }
+      },
+      "route": {
+        "properties": {
+          "value": 0.0,
+          "progress_pct": 0.0,
+          "grade_pct": 7.1
+        }
+      },
+      "trips_total": {
+        "properties": {
+          "value": 0,
+          "unit": "trips"
+        }
+      },
+      "wait": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "cycle": {
+        "properties": {
+          "value": 0.0,
+          "unit": "s"
+        }
+      },
+      "dispatch": {
+        "properties": {
+          "excavator": 2,
+          "active": false
+        }
+      },
+      "identity": {
+        "properties": {
+          "model": "КАМАЗ-65805 Самсон",
+          "call_sign": "СМ-08"
+        }
+      }
+    }
+  }
+}

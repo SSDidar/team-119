@@ -1,0 +1,49 @@
+# Samson digital mine overlay. Start from repository root: make samson
+services:
+  mine-setup:
+    build:
+      context: ../..
+      dockerfile: mine/Dockerfile
+    image: openegiz/samson-mine:local
+    restart: "no"
+    command: ["python", "setup_twins.py"]
+    environment:
+      DITTO_URL: http://ditto-nginx:80
+      DITTO_PASSWORD: ${DITTO_PASSWORD}
+    depends_on:
+      init:
+        condition: service_completed_successfully
+
+  mine-simulator:
+    image: openegiz/samson-mine:local
+    pull_policy: never
+    restart: unless-stopped
+    mem_limit: 160m
+    environment:
+      MQTT_HOST: mosquitto
+      MQTT_PORT: "1883"
+      SIM_SPEEDUP: ${SIM_SPEEDUP:-10}
+      CONTROL_PORT: "8091"
+    depends_on:
+      mine-setup:
+        condition: service_completed_successfully
+
+  mine-ui:
+    build:
+      context: ../..
+      dockerfile: mine/ui.Dockerfile
+    image: openegiz/samson-ui:local
+    restart: unless-stopped
+    mem_limit: 256m
+    environment:
+      DITTO_URL: http://ditto-nginx:80
+      DITTO_PASSWORD: ${DITTO_PASSWORD}
+      SIMULATOR_URL: http://mine-simulator:8091
+      PORT: "8088"
+    ports:
+      - "${OPENEGIZ_BIND:-127.0.0.1}:${SAMSON_UI_PORT:-8088}:8088"
+    depends_on:
+      mine-simulator:
+        condition: service_started
+      ditto-nginx:
+        condition: service_healthy
