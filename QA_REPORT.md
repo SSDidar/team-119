@@ -13,7 +13,7 @@ The suite checks:
 - [x] Canvas rendering at 1280×720, 1366×768, 1920×1080, 900×900 and 390×844.
 - [x] Browser page errors and console errors are treated as test failures.
 
-**Execution status:** The suite and GitHub Actions workflow have been committed. A completed Actions run for this exact repository revision has not yet been confirmed; do not treat the checklist above as proof that the remote CI job passed.
+**Execution status:** GitHub Actions completed successfully for commit `6d7ed6a5f3ce11cee525f12487b844453d117287`, including the current root HTML, Playwright suite and workflow: [successful browser-test run](https://github.com/SSDidar/team-119/actions/runs/40226967261). A later documentation-only commit also triggered a new run; its completion is separate from the successful run linked above.
 
 ## Supplied archive smoke test
 
