@@ -1,43 +1,47 @@
-# <Team name>: a digital mine on OpenEgiz
+# SmartHaul — цифровой карьер на OpenEgiz
 
-> Team Repository of the contest “Digital Mine on OpenEgiz”. **Replace the contents of this file with the instructions for your Submission.** The AI Jury runs the Submission strictly by these instructions, from scratch, in the Judge Environment. Accepted languages: English, Kazakh, Russian.
+Интерактивный walkthrough цифрового карьера: движение самосвалов, очереди, выбор назначения, перекрытие дороги C-3, отказ техники, оценка эффекта и архитектура решения.
 
-> **Start with the Concept**, the first section of [SUBMISSION.md](SUBMISSION.md): the Team writes it before any code. What AI agents build from this Template without a Concept is the Default Solution, published on the [contest site](https://openegiz-contest.github.io/) as the low bar: a Submission that does not go beyond it gets low levels in the Rubric. AI agents read [AGENTS.md](AGENTS.md).
+## Быстрый запуск
 
-## Running
+Откройте `index.html` в актуальном Google Chrome или Microsoft Edge. Для автономного walkthrough не требуются npm, внешние библиотеки или локальный сервер.
 
-Requirements (Docker, `make`, Windows/WSL2 setup) are in [OPENEGIZ.md](OPENEGIZ.md) / [OPENEGIZ.ru.md](OPENEGIZ.ru.md).
+- `← / →` — предыдущая/следующая глава.
+- `Пробел` — пауза или продолжение автоматического тура.
+- Кнопки глав в нижней панели — прямая навигация.
+- Перетаскивание мышью — поворот обзора; колесо — масштаб.
+- `R` — сброс камеры; кнопка полного экрана — полноэкранный режим.
+- «Озвучка» использует синтез речи браузера, если доступен голос.
+
+## Девять глав
+
+1. Карьер — единая система.
+2. Каждый рейс — полный цикл.
+3. Проблема — очереди и ожидание.
+4. SmartHaul выбирает выгодное назначение.
+5. Дорога C-3 перекрыта.
+6. Поломка самосвала не должна остановить рейсы.
+7. Экономику нужно сравнивать честно.
+8. Как устроен SmartHaul.
+9. Финал.
+
+## OpenEgiz platform
+
+В репозитории сохранены файлы платформы и пример. Инструкции по Docker, make и Windows/WSL2 см. в [OPENEGIZ.md](OPENEGIZ.md) и [OPENEGIZ.ru.md](OPENEGIZ.ru.md). Стандартные команды примера:
 
 ```bash
-sudo apt install -y make   # if make is missing (clean Ubuntu)
-make up            # the OpenEgiz platform
-make example-mine  # the Example Mine: twins, simulator, dashboard
+make up
+make example-mine
 ```
 
-Replace these commands with the commands of your Submission. The Submission must start by following these instructions without manual intervention (Rules, clause 6.4); downloading datasets and models and building are also listed here.
+Они поднимают платформу и примерную шахту, но сами по себе не означают, что walkthrough подключён к live-телеметрии.
 
-## What to open
+## Статус и ограничения
 
-- Grafana: the address and login are printed by `make up`.
-- <where to see the mine visualization, which dashboards>
+- `index.html` — автономная интерактивная презентация.
+- `SUBMISSION.md` — конкурсная концепция и честное описание границ.
+- `TECHNICAL_AUDIT.md` — технический аудит и оставшиеся проверки.
+- `QA_REPORT.md` — чек-лист проверок текущей ревизии.
+- `presentation.pdf` — краткая презентация проекта.
 
-## Repository contents
-
-| Path | Contents |
-|---|---|
-| `team/` | Directory for the Team's code. Using it is optional: any part may be changed, including the platform core |
-| `SUBMISSION.md` | Description of the Submission: **required** |
-| `presentation.pdf` | Presentation: **required**, in the repository root |
-| `AGENTS.md`, `CLAUDE.md` | Instructions for your AI agents (Codex, Claude Code and others read them automatically) |
-| `examples/mine/` | The Example Mine: shows how a digital mine is built on OpenEgiz. It is not a basis for the Submission |
-| `OPENEGIZ.md`, `OPENEGIZ.ru.md` | Documentation of the OpenEgiz platform v1.0.4 |
-
-The Submission is the `main` branch at the moment of the Freeze; other branches are not evaluated.
-
-## License
-
-The Submission is distributed under the MIT license, see [LICENSE](LICENSE). Copyright belongs to the Team: add the line `Copyright (c) 2026 <Team members>` to `LICENSE`.
-
----
-
-Platform: [aleka07/openegiz](https://github.com/aleka07/openegiz). If the platform was useful to you, support the project with a star on GitHub.
+Walkthrough использует упрощённую визуализацию и демонстрационные данные. Он не является инженерной моделью рельефа, не подтверждает реальные производственные показатели и не управляет техникой. Подключение к MQTT/Eclipse Ditto, синхронизацию twin-объектов и платформенные сценарии необходимо отдельно реализовать и проверить.

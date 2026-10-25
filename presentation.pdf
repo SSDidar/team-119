@@ -1,0 +1,94 @@
+%PDF-1.4
+%SMART
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R 5 0 R 7 0 R] /Count 3 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R >> >> /Contents 4 0 R >>
+endobj
+4 0 obj
+<< /Length 824 >>
+stream
+0.04 0.08 0.07 rg 0 0 595 842 re f
+0.78 1 0.44 rg 48 690 8 76 re f
+BT /F1 15 Tf 0.78 1 0.44 rg 72 760 Td (SMART OPERATIONS / DIGITAL MINE) Tj ET
+BT /F1 32 Tf 0.93 0.97 0.94 rg 72 650 Td (SmartHaul) Tj ET
+BT /F1 22 Tf 0.93 0.97 0.94 rg 72 615 Td (Digital Mine Scenario Walkthrough) Tj ET
+BT /F1 12 Tf 0.68 0.78 0.72 rg 72 570 Td (Interactive prototype for open-pit haulage scenarios) Tj ET
+0.08 0.15 0.12 rg 72 390 450 110 re f
+0.78 1 0.44 rg 90 465 150 4 re f
+BT /F1 14 Tf 0.93 0.97 0.94 rg 90 438 Td (Six scenarios) Tj ET
+BT /F1 11 Tf 0.68 0.78 0.72 rg 90 412 Td (Overview - Truck cycle - Queue - Road closure) Tj ET
+BT /F1 11 Tf 0.68 0.78 0.72 rg 90 392 Td (Vehicle breakdown - Scenario comparison) Tj ET
+BT /F1 10 Tf 0.68 0.78 0.72 rg 72 100 Td (Contest prototype | Synthetic data | Not connected to live equipment) Tj ET
+endstream
+endobj
+5 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R >> >> /Contents 6 0 R >>
+endobj
+6 0 obj
+<< /Length 1161 >>
+stream
+0.04 0.08 0.07 rg 0 0 595 842 re f
+BT /F1 13 Tf 0.78 1 0.44 rg 52 780 Td (01 / CONCEPT) Tj ET
+BT /F1 25 Tf 0.93 0.97 0.94 rg 52 735 Td (A clearer view of haulage operations) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 52 675 Td (SmartHaul is a demonstration concept for a digital open-pit mine.) Tj ET
+BT /F1 12 Tf 0.68 0.78 0.72 rg 52 651 Td (It helps explain how local disruptions affect routes and truck flow.) Tj ET
+0.08 0.15 0.12 rg 52 485 490 120 re f
+BT /F1 14 Tf 0.78 1 0.44 rg 72 570 Td (Operational scenarios) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 535 Td (01  Mine overview and road network) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 512 Td (02  Truck cycle: loading, haul, unload, return) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 489 Td (03  Queue at loading point) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 466 Td (04  C-3 road closure and illustrative detour) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 443 Td (05  HT-04 breakdown; other trucks continue) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 420 Td (06  Compare illustrative network states) Tj ET
+BT /F1 10 Tf 0.68 0.78 0.72 rg 52 100 Td (The page is a visual explainer, not a dispatch control system.) Tj ET
+endstream
+endobj
+7 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] /Resources << /Font << /F1 9 0 R >> >> /Contents 8 0 R >>
+endobj
+8 0 obj
+<< /Length 1287 >>
+stream
+0.04 0.08 0.07 rg 0 0 595 842 re f
+BT /F1 13 Tf 0.78 1 0.44 rg 52 780 Td (02 / IMPLEMENTATION STATUS) Tj ET
+BT /F1 25 Tf 0.93 0.97 0.94 rg 52 735 Td (Prototype boundaries) Tj ET
+0.08 0.15 0.12 rg 52 545 490 125 re f
+BT /F1 14 Tf 0.78 1 0.44 rg 72 635 Td (Included) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 600 Td (Standalone Canvas scene and six navigable scenarios) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 577 Td (Pause, reset, keyboard navigation, drag and zoom) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 554 Td (Documentation of assumptions and known limitations) Tj ET
+0.20 0.10 0.09 rg 52 360 490 135 re f
+BT /F1 14 Tf 1 0.75 0.41 rg 72 465 Td (Not yet validated) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 430 Td (Live MQTT / Eclipse Ditto integration) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 407 Td (Production dispatch optimization or real savings) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 72 384 Td (Clean-environment integration tests) Tj ET
+BT /F1 12 Tf 0.93 0.97 0.94 rg 52 300 Td (All metrics in the demo are synthetic and illustrative.) Tj ET
+BT /F1 12 Tf 0.68 0.78 0.72 rg 52 277 Td (Do not use this prototype to control equipment or for safety decisions.) Tj ET
+BT /F1 10 Tf 0.68 0.78 0.72 rg 52 100 Td (SmartHaul | Presentation artifact | Current scope stated transparently) Tj ET
+endstream
+endobj
+9 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+xref
+0 10
+0000000000 65535 f 
+0000000016 00000 n 
+0000000065 00000 n 
+0000000134 00000 n 
+0000000260 00000 n 
+0000001135 00000 n 
+0000001261 00000 n 
+0000002474 00000 n 
+0000002600 00000 n 
+0000003939 00000 n 
+trailer
+<< /Size 10 /Root 1 0 R >>
+startxref
+4009
+%%EOF

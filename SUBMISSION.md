@@ -1,64 +1,61 @@
-# SUBMISSION
-
-<!-- Fill in every section. The AI Jury studies this file together with the code, the Build Report, the presentation and the Stand's interface. Accepted languages: English, Kazakh, Russian. These hint comments may be deleted. -->
+# SUBMISSION — SmartHaul: диспетчерские сценарии цифрового карьера
 
 ## Concept
 
-<!-- Written by the Team before the code: your own choice, a few sentences per answer. Everything else in the Submission follows from it. -->
+**Enterprise:** Концептуальная открытая горнодобывающая площадка с карьерными уступами, дорогами, погрузочными и разгрузочными узлами.
 
-**Enterprise:** <!-- Which mining enterprise, or which part of it, the twin represents. -->
+**Users:** Диспетчер смены, руководитель транспортного участка и инженер, оценивающий работу технологической сети.
 
-**Users:** <!-- Who uses the twin. -->
+**Decision:** Как анализировать рейсы, очереди, назначение техники и реакцию сети на перекрытие дороги или отказ самосвала; какие параметры требуется отслеживать перед оперативным переназначением.
 
-**Decision:** <!-- Which decision the twin helps them make. -->
+**Why this choice:** Транспортная система наглядно показывает, как локальное событие может повлиять на поток перевозок. Сценарии понятны на демонстрации и могут быть расширены после подключения проверенных данных.
 
-**Why this choice:** <!-- Why this enterprise, these users and this decision. -->
-
-**Real or fictional:** <!-- A real object: name it and give the sources of its numbers. A fictional one: which real objects it resembles and where its numbers come from. A real object with sourced numbers scores higher. -->
+**Real or fictional:** Концептуальная модель, не цифровой двойник конкретного действующего предприятия. Параметры walkthrough демонстрационные; реальные производственные данные не заявляются.
 
 ## Team
 
-<!-- GitHub usernames of the Participants. Other personal data are not required: the repository becomes public after the Freeze (Rules, section 15). -->
-
 | GitHub |
 |---|
-|  |
+| SSDidar |
 
 ## Mine
 
-<!-- Which part of a mining enterprise the Submission represents (open pit, underground mine, processing plant…), which objects are twins in OpenEgiz, how they are related, and where they are defined in the code. -->
+В корневом `index.html` находится самостоятельный walkthrough с девятью главами, упрощённой моделью уступов и дорог, а также визуальными представителями самосвалов. Исходный пример платформы находится в `examples/mine/`.
 
 ## Modules and What-if Scenarios
 
-<!-- Modules: functions on top of the twin, from the Mine Map or your own. What-if Scenarios: changes of an operating condition that can be run on the Stand without changing the code (close a road, stop equipment…). Only what works on the Stand is taken into account. -->
-
-| Module or What-if Scenario | What it does | How to see it on the Stand | How to undo it (scenarios) |
+| Module or What-if Scenario | What it does | How to see it on the Stand | How to undo it |
 |---|---|---|---|
-|  |  |  |  |
+| Карьер целиком | Показывает уступы, дороги и технику | Глава 1 | Перейти к другой главе |
+| Цикл рейса | Иллюстрирует погрузку, гружёный путь, разгрузку и возврат | Глава 2 | Перейти к другой главе |
+| Очереди | Объясняет потери ожидания и дисбаланс подачи техники | Глава 3 | Перейти к другой главе |
+| Выбор назначения | Демонстрирует концепцию выбора выгодного назначения | Глава 4 | Перейти к другой главе |
+| Перекрытие C-3 | Показывает недоступный сегмент и условный объезд | Глава 5 | Перейти к другой главе |
+| Отказ HT-04 | Показывает остановку одной машины при продолжающемся движении остальных | Глава 6 | Перейти к другой главе |
+| Эффект | Объясняет сравнение показателей до и после решения | Глава 7 | Перейти к другой главе |
+| Архитектура | Показывает предполагаемый путь к платформенной интеграции | Глава 8 | Перейти к другой главе |
+| Финал | Подводит итог презентации | Глава 9 | Перейти к другой главе |
+
+Сценарии walkthrough являются презентационной визуализацией, а не подключёнными к платформе исполняемыми what-if командами.
 
 ## What works and what does not
 
-<!-- What has been verified, what is unfinished, which bugs are known. -->
+**В автономном walkthrough:** девять глав, автоматический тур, ручная навигация, управление камерой, масштаб и браузерная озвучка (если поддерживается).
+
+**Не подтверждено:** сквозной обмен телеметрией MQTT/Eclipse Ditto, синхронизация twin-объектов, производственная оптимизация диспетчеризации, измеренный экономический эффект и интеграционные испытания в окружении жюри.
 
 ## Data and Assumptions
 
-<!--
-- Synthetic and real data.
-- Sources of parameters: equipment data sheets, reference literature, industrial safety regulations, datasets.
-- Datasets: source, license, how they are provided (in the repository or downloaded per the README).
-Confidential data of organizations and personal data are prohibited.
--->
+Используются демонстрационные параметры. Число машин, проценты, очереди и другие показатели не являются телеметрией действующего предприятия. Источники реальных производственных параметров не заявляются.
 
 ## Mine visualization
 
-<!-- Address on the Stand, dashboard or scene; what it shows. -->
+Основная презентация — `index.html` в корне репозитория. Откройте в актуальном Chrome или Edge.
 
 ## Limitations
 
+Визуализация не является инженерной моделью рельефа, производственным 3D-движком или системой управления оборудованием. Нельзя использовать демонстрационные значения для промышленной безопасности или планирования реальных смен. Интеграцию с OpenEgiz необходимо отдельно реализовать и проверить.
+
 ## Presentation
 
-`presentation.pdf` in the repository root. Video (optional): <link>
-
----
-
-Platform: OpenEgiz v1.0.4.
+`presentation.pdf` в корне репозитория. Видео не приложено.
